@@ -1,44 +1,66 @@
 package com.openclassrooms.safetynet.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.openclassrooms.safetynet.model.MedicalRecord;
+import com.openclassrooms.safetynet.model.Person;
+import com.openclassrooms.safetynet.service.PersonService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class PersonController {
 
+    @Autowired
+    private PersonService personService;
 
+    /**
+     * This method send the list of persons via the API (/persons)
+     * @return the list of persons via API REST
+     */
     @GetMapping("/persons")
-    public String getPerson() {
-        return "une liste de personne";
+    public List<Person> getPersons() {
+        return personService.getPersonsService();
     }
+
+
+    /**
+     * This method adds a person to the list of persons via the API (/persons)
+     * @return the list of persons with the new person via API REST
+     */
+    @PostMapping("/persons")
+    public List<Person> addPerson(){
+        String firstName = "Toto";
+        String lastName = "Tata";
+        String phone = "333-666-9999";
+        String zip = "97451";
+        String address = "1509 Culver St";
+        String city = "Culver";
+        String email = "adresse@email.com";
+        String birthdate = "12/06/1975";
+        List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
+        List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
+        personService.addPersonService(new Person(firstName, lastName, phone, zip, address, city, email, new MedicalRecord(firstName, lastName, birthdate, medications, allergies)));
+        return personService.getPersonsService();
+    }
+
+    @PutMapping("/persons")
+    public List<Person> updatePerson(){
+        String phone = "000-000-0000";
+        String namePersonToUpdate = "TotoTata";
+        personService.updatePersonService(phone, namePersonToUpdate);
+        return personService.getPersonsService();
+    }
+
+    @DeleteMapping("/persons")
+    public List<Person> deletePerson(){
+        String namePersonToDelete = "TotoTata";
+        personService.removePersonService(namePersonToDelete);
+        return personService.getPersonsService();
+    }
+
 /*
-
-    @GetMapping("/persons")
-
-    public Iterable<Person> getPersons() {
-        persons.forEach(p -> System.out.println(p.firstName.concat(p.lastName).concat(p.address).concat(p.city).concat(p.phone).concat(p.zip)));
-    }
-
-
-    @GetMapping("/person/{phone}")
-    public Person getPersonByPhone(@PathVariable String phone){
-        Person person = new Person(phone);
-        return person;
-    }
-
-
-    @GetMapping("/person")
-    public String getPerson(){
-        return "une personne";
-    }
-
-    @GetMapping("/person/{phone}")
-    public Person getPersonByPhone(@PathVariable String phone){
-        Person person = new Person("Sophia", "Zemicks", "892 Downing Ct", "Culver", "97451", phone, "soph@email.com");
-        return person;
-    }
-
-
 
 
     http://localhost:8080/person

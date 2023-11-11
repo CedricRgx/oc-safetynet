@@ -4,7 +4,7 @@ import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.JSONDatabase;
-import com.openclassrooms.safetynet.model.MedicalRecords;
+import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 public class SafetynetApplication {
@@ -27,12 +29,13 @@ public class SafetynetApplication {
 	private static final Logger logger = LogManager.getLogger("SafetynetApplication");
 
 	@Autowired
-	private JSONDatabase jsondatabase;
+	private JSONDatabase jsonDatabase;
 
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(SafetynetApplication.class, args);
 		System.out.println("Application UP !");
 	}
+
 
 	@Bean
 	CommandLineRunner runner(){
@@ -50,31 +53,41 @@ public class SafetynetApplication {
 			Any personAny = any.get("persons");
 			logger.info("Loading persons data from input file");
 			List<Person> personDatafile = initializePersons(personAny);
-			personDatafile.forEach(p -> System.out.println(p.getFirstName().concat(p.getLastName()).concat(p.getAddress()).concat(p.getCity()).concat(p.getPhone()).concat(p.getZip())));
-			//Populate the Jsondatabase object from data retrieved from the input file
-			jsondatabase.setListOfPersons(personDatafile);
+			//personDatafile.forEach(p -> System.out.println(p.getFirstName().concat(p.getLastName()).concat(p.getAddress()).concat(p.getCity()).concat(p.getPhone()).concat(p.getZip()).concat(p.getEmail())));
+			//Populate the JsonDatabase object from data retrieved from the input file
+			jsonDatabase.setListOfPersons(personDatafile);
 
 
 			//Loading FireStation data from file into JSONDatabase object
 			Any fireStationAny = any.get("firestations");
 			logger.info("Loading fire stations data from input file");
-			List<FireStation> fireStationDatafile = initializeFireStations(fireStationAny);
-			fireStationDatafile.forEach(p -> System.out.println(p.getAddress().concat(p.getStationNumber())));
-			//Populate the Jsondatabase object from data retrieved from the input file
-			jsondatabase.setListOfFireStations(fireStationDatafile);
+			List<FireStation> fireStationDatafile = initializeFireStation(fireStationAny);
+			//fireStationDatafile.forEach(p -> System.out.println(p.getAddress().concat(p.getStationNumber())));
+			//Populate the JsonDatabase object from data retrieved from the input file
+			jsonDatabase.setListOfFireStations(fireStationDatafile);
 
 
 			//Loading MedicalRecords data from file into JSONDatabase object
-			Any medicalRecordsAny = any.get("medicalrecords");
+			Any medicalRecordAny = any.get("medicalrecords");
 			logger.info("Loading medical records data from input file");
-			List<MedicalRecords> medicalrecordsDatafile = initializeMedicalRecords(medicalRecordsAny);
-			medicalrecordsDatafile.forEach(p -> System.out.println(p.getFirstName().concat(p.getLastName()).concat(p.getBirthdate()).concat(p.getMedications().toString()).concat(p.getAllergies().toString())));
-			//Populate the Jsondatabase object from data retrieved from the input file
-			jsondatabase.setListOfMedicalRecords(medicalrecordsDatafile);
+			List<MedicalRecord> medicalrecordDatafile = initializeMedicalRecord(medicalRecordAny);
+			//medicalrecordsDatafile.forEach(p -> System.out.println(p.getFirstName().concat(p.getLastName()).concat(p.getBirthdate()).concat(p.getMedications().toString()).concat(p.getAllergies().toString())));
+			//Populate the JsonDatabase object from data retrieved from the input file
+			jsonDatabase.setListOfMedicalRecord(medicalrecordDatafile);
+
+			loadMedicalRecordsIntoPerson(medicalrecordDatafile, personDatafile);
+
+			loadPersonIntoFirestation(personDatafile, fireStationDatafile);
+
 		};
 
 	}
 
+	/**
+	 * This method reads the line from the input data file and sets the data in the people list
+	 * @param personAny
+	 * @return the list of person from the input data file
+	 */
 	private List<Person> initializePersons(Any personAny){
 		List<Person> persons = new ArrayList<>();
 		personAny.forEach(a -> persons.add(Person.builder()
@@ -89,25 +102,75 @@ public class SafetynetApplication {
 		return persons;
 	};
 
-	private List<FireStation> initializeFireStations(Any fireStationAny){
+	/**
+	 * This method reads the line from the input data file and sets the data in the fire station list
+	 * @param fireStationAny
+	 * @return the list of fire stations from the input data file
+	 */
+	private List<FireStation> initializeFireStation(Any fireStationAny){
 		List<FireStation> fireStations = new ArrayList<>();
 		fireStationAny.forEach(a -> fireStations.add(FireStation.builder()
 				.address(a.get("address").toString())
-				.stationNumber(a.get("stationNumber").toString())
+				.stationNumber(a.get("station").toString())
 				.build()));
 		return fireStations;
 	};
 
-	private List<MedicalRecords> initializeMedicalRecords(Any medicalRecordsAny){
-		List<MedicalRecords> medicalRecords = new ArrayList<>();
-		medicalRecordsAny.forEach(a -> medicalRecords.add(MedicalRecords.builder()
+	/**
+	 * This method reads the line from the input data file and sets the data in the medical records list
+	 * @param medicalRecordAny
+	 * @return the list of medical records from the input data file
+	 */
+	private List<MedicalRecord> initializeMedicalRecord(Any medicalRecordAny){
+		List<MedicalRecord> medicalRecord = new ArrayList<>();
+		medicalRecordAny.forEach(a -> medicalRecord.add(MedicalRecord.builder()
 				.firstName(a.get("firstName").toString())
 				.lastName(a.get("lastName").toString())
 				.birthdate(a.get("birthdate").toString())
 				.medications(Collections.singletonList(a.get("medications").toString()))
 				.allergies(Collections.singletonList(a.get("allergies").toString()))
 				.build()));
-		return medicalRecords;
+		return medicalRecord;
+	}
+
+	/**
+	 * This method sets the medical records to the person
+	 * @param medicalrecordDatafile
+	 * @param personDatafile
+	 */
+	private void loadMedicalRecordsIntoPerson(List<MedicalRecord> medicalrecordDatafile, List<Person> personDatafile){
+		String nameMedicalRecord;
+		String namePerson;
+		for(MedicalRecord medicalRecord:medicalrecordDatafile) {
+			nameMedicalRecord = medicalRecord.getFirstName().concat(medicalRecord.getLastName());
+			for(Person person:personDatafile) {
+				namePerson = person.getFirstName().concat(person.getLastName());
+				if(nameMedicalRecord.equals(namePerson)){ //if firstname and lastname are identical, then the medical records is linked to the person
+					person.setMedicalRecord(medicalRecord);
+				}
+			}
+		}
+	}
+
+
+	/**
+	 * This method sets the list of person by fire station
+	 * @param personDatafile
+	 * @param firestationDatafile
+	 */
+	private void loadPersonIntoFirestation(List<Person> personDatafile, List<FireStation> firestationDatafile){
+		String adressPerson;
+		String adressFireStation;
+		Map<String, List<Person>> personGroupByAddress = personDatafile.stream().collect(Collectors.groupingBy(Person::getAddress)); //Regroup the persons by address
+		for(Map.Entry<String, List<Person>> entry : personGroupByAddress.entrySet()) {
+			adressPerson = entry.getKey();
+			for(FireStation firestation:firestationDatafile){
+				adressFireStation = firestation.getAddress();
+				if(adressPerson.equals(adressFireStation)){
+					firestation.setPersonByStation(entry.getValue());
+				}
+			}
+		}
 	}
 
 }

@@ -15,6 +15,16 @@ public class Person {
     private String city;
     private String email;
 
-    private MedicalRecords medicalRecords;
+    private MedicalRecord medicalRecord;
 
+    public Person(String firstName, String lastName, String phone, String zip, String address, String city, String email, MedicalRecord medicalRecord) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.zip = zip;
+        this.address = address;
+        this.city = city;
+        this.email = email;
+        this.medicalRecord = medicalRecord;
+    }
 }
