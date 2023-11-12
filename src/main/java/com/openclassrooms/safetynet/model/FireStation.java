@@ -14,4 +14,9 @@ public class FireStation {
 
     private List<Person> personByStation;
 
+    public FireStation(String address, String stationNumber, List<Person> personByStation) {
+        this.address = address;
+        this.stationNumber = stationNumber;
+        this.personByStation = personByStation;
+    }
 }

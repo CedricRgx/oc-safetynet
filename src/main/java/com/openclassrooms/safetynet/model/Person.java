@@ -27,4 +27,5 @@ public class Person {
         this.email = email;
         this.medicalRecord = medicalRecord;
     }
+
 }

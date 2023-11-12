@@ -24,10 +24,9 @@ public class PersonController {
         return personService.getPersonsService();
     }
 
-
     /**
      * This method adds a person to the list of persons via the API (/persons)
-     * @return the list of persons with the new person via API REST
+     * @return the list of persons with a new person via API REST
      */
     @PostMapping("/persons")
     public List<Person> addPerson(){
@@ -45,14 +44,23 @@ public class PersonController {
         return personService.getPersonsService();
     }
 
+    /**
+     * This method update a person to the list of persons via the API (/persons)
+     * @return the list of persons with an updated person via API REST
+     */
     @PutMapping("/persons")
     public List<Person> updatePerson(){
-        String phone = "000-000-0000";
+        String keyToUpdate = "phone";
+        String valueToUpdate = "000-000-0000";
         String namePersonToUpdate = "TotoTata";
-        personService.updatePersonService(phone, namePersonToUpdate);
+        personService.updatePersonService(namePersonToUpdate, keyToUpdate, valueToUpdate);
         return personService.getPersonsService();
     }
 
+    /**
+     * This method delete a person from the list of persons via the API (/persons)
+     * @return the list of persons without the removed person via API REST
+     */
     @DeleteMapping("/persons")
     public List<Person> deletePerson(){
         String namePersonToDelete = "TotoTata";
