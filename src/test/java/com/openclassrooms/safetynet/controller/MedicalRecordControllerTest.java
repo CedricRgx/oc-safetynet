@@ -2,7 +2,7 @@ package com.openclassrooms.safetynet.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.safetynet.model.MedicalRecord;
-import com.openclassrooms.safetynet.model.Person;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -10,17 +10,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class PersonControllerTest {
+class MedicalRecordControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -34,79 +33,65 @@ class PersonControllerTest {
     }
 
     @Test
-    public void getPersonsTest() throws Exception {
+    public void getMedicalRecordsTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/persons"))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].firstName", is("John")));
+                .get("/medicalRecord"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].firstName", CoreMatchers.is("John")));
     }
 
     @Test
-    public void addPersonTest() throws Exception {
+    public void addMedicalRecordTest() throws Exception {
+        //define a medical record to add for the test
         String firstName = "Toto";
         String lastName = "Tata";
-        String phone = "333-666-9999";
-        String zip = "97451";
-        String address = "1509 Culver St";
-        String city = "Culver";
-        String email = "adresse@email.com";
         String birthdate = "12/06/1975";
         List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
         List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
-        Person personTest = new Person(firstName, lastName, phone, zip, address, city, email, new MedicalRecord(firstName, lastName, birthdate, medications, allergies));
+        MedicalRecord medicalRecordTest = new MedicalRecord(firstName, lastName, birthdate, medications, allergies);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/persons")
-                        .content(asJsonString(personTest))
+                        .post("/medicalRecord")
+                        .content(asJsonString(medicalRecordTest))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isOk());
-    }
-
-    @Test
-    public void updatePersonTest() throws Exception {
-        String firstName = "Toto";
-        String lastName = "Tata";
-        String phone = "841-874-6512";
-        String zip = "97451";
-        String address = "1509 Culver St";
-        String city = "Culver";
-        String email = "adresse@email.com";
-        String birthdate = "12/06/1975";
-        List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
-        List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
-        Person personTest = new Person(firstName, lastName, phone, zip, address, city, email, new MedicalRecord(firstName, lastName, birthdate, medications, allergies));
-
-        mockMvc.perform(MockMvcRequestBuilders
-                    .put("/persons")
-                    .content(asJsonString(personTest))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void deletePersonTest() throws Exception {
+    public void updateMedicalRecordTest() throws Exception {
         String firstName = "Toto";
         String lastName = "Tata";
-        String phone = "841-874-6512";
-        String zip = "97451";
-        String address = "1509 Culver St";
-        String city = "Culver";
-        String email = "adresse@email.com";
         String birthdate = "12/06/1975";
         List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
         List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
-        Person personTest = new Person(firstName, lastName, phone, zip, address, city, email, new MedicalRecord(firstName, lastName, birthdate, medications, allergies));
+        MedicalRecord medicalRecordTest = new MedicalRecord(firstName, lastName, birthdate, medications, allergies);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/persons")
-                        .content(asJsonString(personTest))
+                        .put("/medicalRecord")
+                        .content(asJsonString(medicalRecordTest))
                         .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON));
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void deleteMedicalRecordTest() throws Exception {
+        String firstName = "Toto";
+        String lastName = "Tata";
+        String birthdate = "12/06/1975";
+        List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
+        List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
+        MedicalRecord medicalRecordTest = new MedicalRecord(firstName, lastName, birthdate, medications, allergies);
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/persons/firstname/Toto"))
+                .post("/medicalRecord")
+                .content(asJsonString(medicalRecordTest))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON));
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .delete("/medicalRecord/firstname/Toto"))
                 .andExpect(status().isNotFound());
     }
 }

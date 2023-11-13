@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * The MedicalRecord class is the data model of the object MedicalRecord
+ */
 @Data
 @Builder
 public class MedicalRecord {

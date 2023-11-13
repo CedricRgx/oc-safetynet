@@ -3,14 +3,21 @@ package com.openclassrooms.safetynet.controller;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The PersonController class is used to manage /persons endpoints and interact with the service PersonService
+ */
 @RestController
 public class PersonController {
+
+    private static final Logger logger = LogManager.getLogger("PersonController");
 
     @Autowired
     private PersonService personService;
@@ -21,15 +28,16 @@ public class PersonController {
      */
     @GetMapping("/persons")
     public List<Person> getPersons() {
+        logger.info("Requête GET sur l'endpoint /persons : affichage de la liste des personnes");
         return personService.getPersonsService();
     }
 
     /**
      * This method adds a person to the list of persons via the API (/persons)
-     * @return the list of persons with a new person via API REST
      */
     @PostMapping("/persons")
-    public List<Person> addPerson(){
+    public void addPerson(){
+        logger.info("Requête POST sur l'endpoint /persons : ajout d'une personne");
         String firstName = "Toto";
         String lastName = "Tata";
         String phone = "333-666-9999";
@@ -41,31 +49,28 @@ public class PersonController {
         List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
         List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
         personService.addPersonService(new Person(firstName, lastName, phone, zip, address, city, email, new MedicalRecord(firstName, lastName, birthdate, medications, allergies)));
-        return personService.getPersonsService();
     }
 
     /**
      * This method update a person to the list of persons via the API (/persons)
-     * @return the list of persons with an updated person via API REST
      */
     @PutMapping("/persons")
-    public List<Person> updatePerson(){
+    public void updatePerson(){
+        logger.info("Requête PUT sur l'endpoint /persons : modification d'une personne");
         String keyToUpdate = "phone";
         String valueToUpdate = "000-000-0000";
         String namePersonToUpdate = "TotoTata";
         personService.updatePersonService(namePersonToUpdate, keyToUpdate, valueToUpdate);
-        return personService.getPersonsService();
     }
 
     /**
      * This method delete a person from the list of persons via the API (/persons)
-     * @return the list of persons without the removed person via API REST
      */
     @DeleteMapping("/persons")
-    public List<Person> deletePerson(){
+    public void deletePerson(){
+        logger.info("Requête DELETE sur l'endpoint /persons : suppression d'une personne");
         String namePersonToDelete = "TotoTata";
         personService.removePersonService(namePersonToDelete);
-        return personService.getPersonsService();
     }
 
 /*

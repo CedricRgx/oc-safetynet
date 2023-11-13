@@ -1,15 +1,19 @@
 package com.openclassrooms.safetynet.controller;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The AlertController class is used to set up the alerts of safetyNet via API REST and interact with the service MedicalRecordService
+ */
 @RestController
 public class AlertController {
 
-    //@GetMapping(value="/test")
-    //public String getHelloWorld() {
-    //    return "templateTest";
-    //}
+    private static final Logger logger = LogManager.getLogger("AlertController");
+
+
 
     /*http://localhost:8080/firestation?stationNumber=<station_number>
     Cette url doit retourner une liste des personnes couvertes par la caserne de pompiers correspondante.

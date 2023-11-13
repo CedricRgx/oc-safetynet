@@ -3,6 +3,9 @@ package com.openclassrooms.safetynet.model;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * The Person class is the data model of the object Person
+ */
 @Data
 @Builder
 public class Person {

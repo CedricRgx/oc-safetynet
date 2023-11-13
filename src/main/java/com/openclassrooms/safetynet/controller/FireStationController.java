@@ -4,14 +4,21 @@ import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.FireStationService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The FireStationController class is used to manage /firestation endpoints and interact with the service FireStationService
+ */
 @RestController
 public class FireStationController {
+
+    private static final Logger logger = LogManager.getLogger("FireStationController");
 
     @Autowired
     private FireStationService fireStationService;
@@ -22,15 +29,16 @@ public class FireStationController {
      */
     @GetMapping("/firestation")
     public List<FireStation> getFireStation() {
+        logger.info("Requête GET sur l'endpoint /firestation : envoi de la liste des stations de pompiers");
         return fireStationService.getFireStationService();
     }
 
     /**
      * This method adds a fire station to the list of fire stations via the API (/persons)
-     * @return the list of fire stations with a new fire station via API REST
      */
     @PostMapping("/firestation")
-    public List<FireStation> addFireStation(){
+    public void addFireStation(){
+        logger.info("Requête POST sur l'endpoint /firestation : ajout d'une station de pompiers");
         String address = "77 Pommier Street";
         String stationNumber = "4";
         Person personOne = new Person("Toto", "Tata", "333-666-9999", "97451", "77 Pommier Street", "Culver", "adresse@email.com",
@@ -39,32 +47,29 @@ public class FireStationController {
                 new MedicalRecord("Toto", "Tata", "12/06/1975", new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}}, new ArrayList<>() {{add("nillacilan");}}));
         List<Person> personsForThisFireStation = new ArrayList<>(){{add(personOne);add(personTwo);}};
         fireStationService.addFireStationService(new FireStation(address, stationNumber, personsForThisFireStation));
-        return fireStationService.getFireStationService();
     }
 
 
     /**
      * This method update a fire station to the list of fire stations via the API (/persons)
-     * @return the list of fire stations with an updated fire stations via API REST
      */
     @PutMapping("/firestation")
-    public List<FireStation> updateFireStation(){
+    public void updateFireStation(){
+        logger.info("Requête PUT sur l'endpoint /firestation : modification d'une station de pompiers");
         String keyToUpdate = "station";
         String valueToUpdate = "9";
         String addressFireStationToUpdate = "77 Pommier Street";
         fireStationService.updateFireStationService(addressFireStationToUpdate, keyToUpdate, valueToUpdate);
-        return fireStationService.getFireStationService();
     }
 
     /**
      * This method delete a fire station from the list of fire stations via the API (/persons)
-     * @return the list of fire stations without the removed fire station via API REST
      */
     @DeleteMapping("/firestation")
-    public List<FireStation> deleteFireStation(){
+    public void deleteFireStation(){
+        logger.info("Requête DELETE sur l'endpoint /firestation : suppression d'une station de pompiers");
         String fireStationToDelete = "77 Pommier Street";
         fireStationService.removeFireStationService(fireStationToDelete);
-        return fireStationService.getFireStationService();
     }
 
 

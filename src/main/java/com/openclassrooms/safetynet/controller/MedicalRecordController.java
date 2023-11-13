@@ -2,15 +2,21 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.service.MedicalRecordService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The MedicalRecordController class is used to manage /medicalRecord endpoints and interact with the service MedicalRecordService
+ */
 @RestController
 public class MedicalRecordController {
 
+    private static final Logger logger = LogManager.getLogger("MedicalRecordController");
 
     @Autowired
     private MedicalRecordService medicalRecordService;
@@ -21,46 +27,44 @@ public class MedicalRecordController {
      */
     @GetMapping("/medicalRecord")
     public List<MedicalRecord> getMedicalRecords(){
+        logger.info("Requête GET sur l'endpoint /medicalRecord : affichage de la liste des dossiers médicaux");
         return medicalRecordService.getMedicalRecords();
     }
 
     /**
      * This method adds a medical record to the list of medical records via the API (/medicalRecord)
-     * @return the list of medical records with a new medical record via API REST
      */
     @PostMapping("/medicalRecord")
-    public List<MedicalRecord> addMedicalRecord(){
+    public void addMedicalRecord(){
+        logger.info("Requête POST sur l'endpoint /medicalRecord : ajout d'un dossier médical");
         String firstName = "Toto";
         String lastName = "Tata";
         String birthdate = "12/07/1975";
         List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
         List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
         medicalRecordService.addMedicalRecordService(new MedicalRecord(firstName, lastName, birthdate, medications, allergies));
-        return medicalRecordService.getMedicalRecords();
     }
 
     /**
-     * This method update a person to the list of persons via the API (/persons)
-     * @return the list of persons with an updated person via API REST
+     * This method update a medical record to the list of medical records via the API (/persons)
      */
     @PutMapping("/medicalRecord")
-    public List<MedicalRecord> updateMedicalRecord(){
+    public void updateMedicalRecord(){
+        logger.info("Requête PUT sur l'endpoint /medicalRecord : modification d'un dossier médical");
         String keyToUpdate = "birthday";
         String valueToUpdate = "09/09/1999";
         String namePersonToUpdate = "TotoTata";
         medicalRecordService.updateMedicalRecord(namePersonToUpdate, keyToUpdate, valueToUpdate);
-        return medicalRecordService.getMedicalRecords();
     }
 
     /**
      * This method delete a medical record from the list of medical records via the API (/persons)
-     * @return the list of medical records without the removed medical record via API REST
      */
     @DeleteMapping("/medicalRecord")
-    public List<MedicalRecord> deleteMedicalRecord(){
+    public void deleteMedicalRecord(){
+        logger.info("Requête DELETE sur l'endpoint /medicalRecord : suppression d'un dossier médical");
         String namePersonToDelete = "TotoTata";
         medicalRecordService.removeMedicalRecordService(namePersonToDelete);
-        return medicalRecordService.getMedicalRecords();
     }
         /*
     http://localhost:8080/medicalRecord

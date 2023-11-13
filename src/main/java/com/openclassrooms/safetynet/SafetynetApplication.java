@@ -15,7 +15,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * The SafetynetApplication is used to parse the data.json file and launch the safetyNet application
+ */
 @SpringBootApplication
 public class SafetynetApplication {
 
@@ -31,9 +33,9 @@ public class SafetynetApplication {
 	@Autowired
 	private JSONDatabase jsonDatabase;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		SpringApplication.run(SafetynetApplication.class, args);
-		System.out.println("Application UP !");
+		System.out.println("SafetyNet application is UP !");
 	}
 
 
@@ -76,11 +78,8 @@ public class SafetynetApplication {
 			jsonDatabase.setListOfMedicalRecord(medicalrecordDatafile);
 
 			loadMedicalRecordsIntoPerson(medicalrecordDatafile, personDatafile);
-
 			loadPersonIntoFirestation(personDatafile, fireStationDatafile);
-
 		};
-
 	}
 
 	/**
@@ -100,7 +99,7 @@ public class SafetynetApplication {
 				.email(a.get("email").toString())
 				.build()));
 		return persons;
-	};
+	}
 
 	/**
 	 * This method reads the line from the input data file and sets the data in the fire station list
@@ -114,7 +113,7 @@ public class SafetynetApplication {
 				.stationNumber(a.get("station").toString())
 				.build()));
 		return fireStations;
-	};
+	}
 
 	/**
 	 * This method reads the line from the input data file and sets the data in the medical records list

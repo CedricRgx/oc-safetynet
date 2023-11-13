@@ -5,6 +5,9 @@ import lombok.Data;
 
 import java.util.List;
 
+/**
+ * The FireStation class is the data model of the object FireStation
+ */
 @Data
 @Builder
 public class FireStation {
