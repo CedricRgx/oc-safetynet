@@ -1,6 +1,5 @@
 package com.openclassrooms.safetynet.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.Test;
@@ -24,14 +23,6 @@ class MedicalRecordControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Test
     public void getMedicalRecordsTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
@@ -52,7 +43,7 @@ class MedicalRecordControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/medicalRecord")
-                        .content(asJsonString(medicalRecordTest))
+                        .content(medicalRecordTest.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -69,7 +60,7 @@ class MedicalRecordControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/medicalRecord")
-                        .content(asJsonString(medicalRecordTest))
+                        .content(medicalRecordTest.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -86,7 +77,7 @@ class MedicalRecordControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/medicalRecord")
-                .content(asJsonString(medicalRecordTest))
+                .content(medicalRecordTest.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
 

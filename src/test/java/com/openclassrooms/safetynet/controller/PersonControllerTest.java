@@ -1,6 +1,5 @@
 package com.openclassrooms.safetynet.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
 import org.junit.jupiter.api.Test;
@@ -24,14 +23,6 @@ class PersonControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     public void getPersonsTest() throws Exception {
@@ -57,7 +48,7 @@ class PersonControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/persons")
-                        .content(asJsonString(personTest))
+                        .content(personTest.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
@@ -79,7 +70,7 @@ class PersonControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                     .put("/persons")
-                    .content(asJsonString(personTest))
+                    .content(personTest.toString())
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -101,7 +92,7 @@ class PersonControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/persons")
-                        .content(asJsonString(personTest))
+                        .content(personTest.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
 

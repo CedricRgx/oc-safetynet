@@ -1,6 +1,5 @@
 package com.openclassrooms.safetynet.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
@@ -16,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,14 +24,6 @@ class FireStationControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    public static String asJsonString(final Object obj) {
-        try {
-            return new ObjectMapper().writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Test
     public void getFireStationTest() throws Exception {
@@ -56,7 +46,7 @@ class FireStationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/firestation")
-                        .content(asJsonString(fireStationTest))
+                        .content(fireStationTest.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -75,7 +65,7 @@ class FireStationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .put("/firestation")
-                        .content(asJsonString(fireStationTest))
+                        .content(fireStationTest.toString())
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -94,7 +84,7 @@ class FireStationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/firestation")
-                .content(asJsonString(fireStationTest))
+                .content(fireStationTest.toString())
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
 
