@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The PersonService class is used to return datas to the controller PersonController
@@ -31,43 +32,52 @@ public class PersonService {
 
     /**
      * This method adds a person to the list of persons
+     * @param person person to add
+     * @return person added
      */
-    public void addPersonService(Person person){
+    public Person addPersonService(Person person){
         logger.info("Service d'ajout d'une personne");
-        List<Person> listOfPersons = getPersonsService();
-        listOfPersons.add(person);
+        List<Person> personList = getPersonsService();
+        personList.add(person);
+        jsonDatabase.setListOfPersons(personList);
+        return person;
     }
 
     /**
      * This method updates one of the attributes of a person
+     * @param person person to update
+     * @return person updated or null
      */
-    public void updatePersonService(String namePersonToUpdate, String keyToUpdate, String valueToUpdate){
+    public Person updatePersonService(Person person){
         logger.info("Service de modification d'une personne");
-        String name;
         List<Person> personList = getPersonsService();
-        for(Person person:personList) {
-            name = person.getFirstName().concat(person.getLastName());
-            if(namePersonToUpdate.equals(name)){
-                switch(keyToUpdate){
-                    case "phone": person.setPhone(valueToUpdate); break;
-                    case "zip": person.setZip(valueToUpdate); break;
-                    case "address": person.setAddress(valueToUpdate); break;
-                    case "city": person.setCity(valueToUpdate); break;
-                    case "email": person.setEmail(valueToUpdate); break;
-                    default:
-                        break;
-                }
-            }
+        Optional<Person> personOptional = personList.stream().filter(p -> p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName())).findAny();
+        if(personOptional.isPresent()){
+            logger.info("Mise à jour de la personne");
+            Person personUpdate = personOptional.get();
+            //Mise à jour des champs
+            personUpdate.setPhone(person.getPhone());
+            personUpdate.setZip(person.getZip());
+            personUpdate.setAddress(person.getAddress());
+            personUpdate.setCity(person.getCity());
+            personUpdate.setEmail(person.getEmail());
+            personUpdate.setMedicalRecord(person.getMedicalRecord());
+        }else{
+            return null; //return null because the firstName and the lastName of the person hasn't founded
         }
+        jsonDatabase.setListOfPersons(personList);
+        return person;
     }
 
     /**
      * This method removes a person in the list of persons
+     * @param firstName and lastName of the person to delete
+     * @return true if the person is not in the list (success of deletion)
      */
-    public void removePersonService(String namePersonToDelete){
+    public boolean removePersonService(String firstName, String lastName){
         logger.info("Service de suppression d'une personne");
         List<Person> personList = getPersonsService();
-        personList.removeIf(p -> p.getFirstName().concat(p.getLastName()).equals(namePersonToDelete));
+        return !personList.removeIf(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
     }
 
 }

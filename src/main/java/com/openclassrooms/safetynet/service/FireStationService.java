@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The FireStationService class is used to return datas to the controller FireStationController
@@ -32,38 +33,45 @@ public class FireStationService {
 
     /**
      * This method adds a fire station to the list of fire stations
+     * @param fireStation fire station to add
+     * @return fire station added
      */
-    public void addFireStationService(FireStation fireStation){
+    public FireStation addFireStationService(FireStation fireStation){
         logger.info("Service d'ajout d'une station de pompiers");
-        List<FireStation> listOfFireStations = getFireStationService();
-        listOfFireStations.add(fireStation);
+        List<FireStation> fireStationList = getFireStationService();
+        fireStationList.add(fireStation);
+        jsonDatabase.setListOfFireStations(fireStationList);
+        return fireStation;
     }
 
     /**
      * This method updates the station number of a fire station
+     * @param fireStation fire station to update
+     * @return fire station updated or null
      */
-    public void updateFireStationService(String addressFireStationToUpdate, String keyToUpdate, String valueToUpdate){
+    public FireStation updateFireStationService(FireStation fireStation){
         logger.info("Service de modification d'une station de pompiers");
-        String address;
-        List<FireStation> FireStationList = getFireStationService();
-        for(FireStation fireStation:FireStationList) {
-            address = fireStation.getAddress();
-            if(addressFireStationToUpdate.equals(address)){
-                switch(keyToUpdate){
-                    case "station": fireStation.setStationNumber(valueToUpdate); break;
-                    default:
-                        break;
-                }
-            }
+        List<FireStation> fireStationList = getFireStationService();
+        Optional<FireStation> fireStationOptional = fireStationList.stream().filter(p -> p.getAddress().equals(fireStation.getAddress())).findAny();
+        if(fireStationOptional.isPresent()){
+            FireStation fireStationUpdate = fireStationOptional.get();
+            //Mise à jour des champs
+            fireStationUpdate.setStationNumber(fireStation.getStationNumber());
+        }else{
+            return null; //return null because the address of the fire station hasn't founded
         }
+        jsonDatabase.setListOfFireStations(fireStationList);
+        return fireStation;
     }
 
     /**
      * This method removes a fire station in the list of fire stations
+     * @param address and stationNumber of the fire station to delete
+     * @return true if the fire station is not in the list (success of deletion)
      */
-    public void removeFireStationService(String fireStationToDelete){
+    public boolean removeFireStationService(String address, String stationNumber){
         logger.info("Service de suppression d'une station de pompiers");
-        List<FireStation> FireStationList = getFireStationService();
-        FireStationList.removeIf(p -> p.getAddress().equals(fireStationToDelete));
+        List<FireStation> fireStationList = getFireStationService();
+        return !fireStationList.removeIf(p -> p.getAddress().equals(address) && p.getStationNumber().equals(stationNumber));
     }
 }

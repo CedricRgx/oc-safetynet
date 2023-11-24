@@ -1,14 +1,14 @@
 package com.openclassrooms.safetynet.controller;
 
-import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,61 +26,71 @@ public class PersonController {
      * This method send the list of persons via the API (/persons)
      * @return the list of persons via API REST
      */
-    @GetMapping("/persons")
-    public List<Person> getPersons() {
+    @GetMapping("/person")
+    public ResponseEntity<List<Person>> getPersons() {
         logger.info("Requête GET sur l'endpoint /persons : affichage de la liste des personnes");
-        return personService.getPersonsService();
+        List<Person> personList = personService.getPersonsService();
+        if(personList.isEmpty()){
+            logger.error("Erreur lors de l'affichage de la liste de personnes");
+            return new ResponseEntity<List<Person>>(personList, HttpStatus.NOT_FOUND);
+        }else{
+            logger.info("Succès lors de l'affichage de la liste de personnes");
+            return new ResponseEntity<List<Person>>(personList, HttpStatus.FOUND);
+        }
     }
 
     /**
      * This method adds a person to the list of persons via the API (/persons)
+     * @param personToAdd person to add
+     * @return the person added via API REST and the status code
      */
-    @PostMapping("/persons")
-    public void addPerson(){
+    @PostMapping("/person")
+    public ResponseEntity<Person> addPerson(@RequestBody Person personToAdd){
         logger.info("Requête POST sur l'endpoint /persons : ajout d'une personne");
-        String firstName = "Toto";
-        String lastName = "Tata";
-        String phone = "333-666-9999";
-        String zip = "97451";
-        String address = "1509 Culver St";
-        String city = "Culver";
-        String email = "adresse@email.com";
-        String birthdate = "12/06/1975";
-        List<String> medications = new ArrayList<>() {{add("noxidian:100mg");add("thradox:700mg");}};
-        List<String> allergies = new ArrayList<>() {{add("nillacilan");}};
-        personService.addPersonService(new Person(firstName, lastName, phone, zip, address, city, email, new MedicalRecord(firstName, lastName, birthdate, medications, allergies)));
+        Person personAdded = personService.addPersonService(personToAdd);
+        if(personAdded == null){
+            logger.error("Erreur lors de l'ajout de la personne");
+            return new ResponseEntity<Person>(personAdded, HttpStatus.BAD_REQUEST);
+        }else {
+            logger.info("Personne ajoutée avec succès");
+            return new ResponseEntity<Person>(personAdded, HttpStatus.CREATED);
+        }
     }
 
     /**
      * This method update a person to the list of persons via the API (/persons)
+     * @param personToUpdate person to update
+     * @return the person updated via API REST and the status code
+     *
      */
-    @PutMapping("/persons")
-    public void updatePerson(){
+    @PutMapping("/person")
+    public ResponseEntity<Person> updatePerson(@RequestBody Person personToUpdate){
         logger.info("Requête PUT sur l'endpoint /persons : modification d'une personne");
-        String keyToUpdate = "phone";
-        String valueToUpdate = "000-000-0000";
-        String namePersonToUpdate = "TotoTata";
-        personService.updatePersonService(namePersonToUpdate, keyToUpdate, valueToUpdate);
+        Person personUpdated = personService.updatePersonService(personToUpdate);
+        if(personUpdated == null){
+            logger.error("Erreur lors de la modification de la personne");
+            return new ResponseEntity<Person>(personUpdated, HttpStatus.NOT_FOUND);
+        }else {
+            logger.info("Personne modifiée avec succès");
+            return new ResponseEntity<Person>(personUpdated, HttpStatus.OK);
+        }
     }
 
     /**
      * This method delete a person from the list of persons via the API (/persons)
+     * @param firstName and lastName of the person to delete
+     * @return the status code
      */
-    @DeleteMapping("/persons")
-    public void deletePerson(){
+    @DeleteMapping("/person")
+    public ResponseEntity deletePerson(@RequestParam String firstName, @RequestParam String lastName){
         logger.info("Requête DELETE sur l'endpoint /persons : suppression d'une personne");
-        String namePersonToDelete = "TotoTata";
-        personService.removePersonService(namePersonToDelete);
+        boolean isDeleted = personService.removePersonService(firstName, lastName);
+        if(isDeleted){
+            logger.info("Personne supprimée avec succès");
+            return new ResponseEntity(HttpStatus.NO_CONTENT);
+        }else {
+            logger.error("Erreur lors de la suppression de la personne");
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
     }
-
-/*
-
-
-    http://localhost:8080/person
-    Cet endpoint permettra d’effectuer les actions suivantes via Post/Put/Delete avec HTTP :
-        ajouter une nouvelle personne ;
-        mettre à jour une personne existante (pour le moment, supposons que le prénom et le nom de famille ne changent pas, mais que les autres champs peuvent être modifiés) ;
-        supprimer une personne (utilisez une combinaison de prénom et de nom comme identificateur unique).
-    */
-
 }

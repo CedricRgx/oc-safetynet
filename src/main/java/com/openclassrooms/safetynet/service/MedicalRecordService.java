@@ -7,8 +7,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * The MedicalRecordService class is used to return datas to the controller MedicalRecordController
@@ -25,51 +25,54 @@ public class MedicalRecordService {
      * This method returns the list of medical records
      * @return the list of medical records
      */
-    public List<MedicalRecord> getMedicalRecords(){
+    public List<MedicalRecord> getMedicalRecordsService(){
         logger.info("Service d'envoi de la liste des dossiers médicaux");
-        List<MedicalRecord> listOfMedicalRecord = jsonDatabase.getListOfMedicalRecord();
-        return listOfMedicalRecord;
+        return jsonDatabase.getListOfMedicalRecord();
     }
 
     /**
      * This method adds a medical record to the list of medical records
+     * @param medicalRecord medical record to add
+     * @return medical record added
      */
-    public void addMedicalRecordService(MedicalRecord medicalRecord){
+    public MedicalRecord addMedicalRecordService(MedicalRecord medicalRecord){
         logger.info("Service d'ajout d'un dossier médical");
-        List<MedicalRecord> listOfMedicalRecords = getMedicalRecords();
-        listOfMedicalRecords.add(medicalRecord);
+        List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
+        medicalRecordList.add(medicalRecord);
+        jsonDatabase.setListOfMedicalRecord(medicalRecordList);
+        return medicalRecord;
     }
 
     /**
      * This method updates one of the attributes of a medical record
+     * @param medicalRecord medical record to update
+     * @return medical record updated or null
      */
-    public void updateMedicalRecord(String namePersonToUpdate, String keyToUpdate, String valueToUpdate){
+    public MedicalRecord updateMedicalRecordService(MedicalRecord medicalRecord){
         logger.info("Service de modification d'un dossier médical");
-        String name;
-        List<MedicalRecord> MedicalRecordsList = getMedicalRecords();
-        for(MedicalRecord medicalRecord:MedicalRecordsList) {
-            name = medicalRecord.getFirstName().concat(medicalRecord.getLastName());
-            if(namePersonToUpdate.equals(name)){
-                switch(keyToUpdate){
-                    case "birthday": medicalRecord.setBirthdate(valueToUpdate); break;
-                    case "medications": medicalRecord.setMedications(Collections.singletonList(valueToUpdate)); break;
-                    case "allergies": medicalRecord.setAllergies(Collections.singletonList(valueToUpdate)); break;
-                    default:
-                        break;
-                }
-            }
+        List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
+        Optional<MedicalRecord> medicalRecordOptional = medicalRecordList.stream().filter(p -> p.getFirstName().equals(medicalRecord.getFirstName()) && p.getLastName().equals(medicalRecord.getLastName())).findAny();
+        if(medicalRecordOptional.isPresent()){
+            MedicalRecord medicalRecordUpdate = medicalRecordOptional.get();
+            //Mise à jour des champs
+            medicalRecordUpdate.setBirthdate(medicalRecord.getBirthdate());
+            medicalRecordUpdate.setMedications(medicalRecord.getMedications());
+            medicalRecordUpdate.setAllergies(medicalRecord.getAllergies());
+        }else{
+            return null; //return null because the firstName and the lastName of the medical record hasn't founded
         }
+        jsonDatabase.setListOfMedicalRecord(medicalRecordList);
+        return medicalRecord;
     }
 
     /**
-     * This method removes a person in the list of persons
+     * This method removes a medical record in the list of medical records
+     * @param firstName and lastName of the medical record to delete
+     * @return true if the medical record is not in the list (success of deletion)
      */
-    public void removeMedicalRecordService(String namePersonToDelete){
+    public boolean removeMedicalRecordService(String firstName, String lastName){
         logger.info("Service de suppression d'un dossier médical");
-        List<MedicalRecord> MedicalRecordsList = getMedicalRecords();
-        MedicalRecordsList.removeIf(p -> p.getFirstName().concat(p.getLastName()).equals(namePersonToDelete));
+        List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
+        return !medicalRecordList.removeIf(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName));
     }
-
-
-
 }
