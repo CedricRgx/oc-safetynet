@@ -28,13 +28,13 @@ public class MedicalRecordController {
      */
     @GetMapping("/medicalRecord")
     public ResponseEntity<List<MedicalRecord>> getMedicalRecords(){
-        logger.info("Requête GET sur l'endpoint /medicalRecord : affichage de la liste des dossiers médicaux");
+        logger.info("GET request on the endpoint /medicalRecord: getting the list of medical records");
         List<MedicalRecord> medicalRecordList = medicalRecordService.getMedicalRecordsService();
         if(medicalRecordList.isEmpty()){
-            logger.error("Erreur lors de l'affichage de la liste des dossiers médicaux");
+            logger.error("Error getting the list of medical records");
             return new ResponseEntity<List<MedicalRecord>>(medicalRecordList, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Succès lors de l'affichage de la liste des dossiers médicaux");
+            logger.info("Success getting the list of medical records");
             return new ResponseEntity<List<MedicalRecord>>(medicalRecordList, HttpStatus.FOUND);
         }
     }
@@ -46,13 +46,13 @@ public class MedicalRecordController {
      */
     @PostMapping("/medicalRecord")
     public ResponseEntity<MedicalRecord> addMedicalRecord(@RequestBody MedicalRecord medicalRecordToAdd){
-        logger.info("Requête POST sur l'endpoint /medicalRecord : ajout d'un dossier médical");
+        logger.info("POST request on the endpoint /medicalRecord: adding a medical record");
         MedicalRecord medicalRecordAdded = medicalRecordService.addMedicalRecordService(medicalRecordToAdd);
         if(medicalRecordAdded == null){
-            logger.error("Erreur lors de l'ajout du dossier médical");
+            logger.error("Error adding medical record");
             return new ResponseEntity<MedicalRecord>(medicalRecordAdded, HttpStatus.BAD_REQUEST);
         }else {
-            logger.info("Dossier médical ajoutée avec succès");
+            logger.info("Success adding medical record");
             return new ResponseEntity<MedicalRecord>(medicalRecordAdded, HttpStatus.CREATED);
         }
     }
@@ -64,13 +64,13 @@ public class MedicalRecordController {
      */
     @PutMapping("/medicalRecord")
     public ResponseEntity<MedicalRecord> updateMedicalRecord(@RequestBody MedicalRecord medicalRecordToUpdate){
-        logger.info("Requête PUT sur l'endpoint /medicalRecord : modification d'un dossier médical");
+        logger.info("PUT request on the endpoint /medicalRecord: updating a medical record");
         MedicalRecord MedicalRecordUpdated = medicalRecordService.updateMedicalRecordService(medicalRecordToUpdate);
         if(MedicalRecordUpdated == null){
-            logger.error("Erreur lors de la modification du dossier médical");
+            logger.error("Error updating medical record");
             return new ResponseEntity<MedicalRecord>(MedicalRecordUpdated, HttpStatus.NOT_FOUND);
         }else {
-            logger.info("Dossier médical modifié avec succès");
+            logger.info("Success updating medical record");
             return new ResponseEntity<MedicalRecord>(MedicalRecordUpdated, HttpStatus.OK);
         }
     }
@@ -82,14 +82,14 @@ public class MedicalRecordController {
      */
     @DeleteMapping("/medicalRecord")
     public ResponseEntity deleteMedicalRecord(@RequestParam String firstName, @RequestParam String lastName){
-        logger.info("Requête DELETE sur l'endpoint /medicalRecord : suppression d'un dossier médical");
+        logger.info("DELETE request on the endpoint /medicalRecord: deleting a medical record");
         boolean isDeleted = medicalRecordService.removeMedicalRecordService(firstName, lastName);
         if(isDeleted){
-            logger.info("Dossier médical supprimé avec succès");
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            logger.info("Success deleting medical record");
+            return new ResponseEntity(HttpStatus.OK);
         }else {
-            logger.error("Erreur lors de la suppression du dossier médical");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            logger.error("Error deleting medical record");
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 }

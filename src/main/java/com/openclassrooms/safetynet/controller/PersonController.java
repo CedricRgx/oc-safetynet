@@ -28,13 +28,13 @@ public class PersonController {
      */
     @GetMapping("/person")
     public ResponseEntity<List<Person>> getPersons() {
-        logger.info("Requête GET sur l'endpoint /persons : affichage de la liste des personnes");
+        logger.info("GET request on the endpoint /persons: getting the list of persons");
         List<Person> personList = personService.getPersonsService();
         if(personList.isEmpty()){
-            logger.error("Erreur lors de l'affichage de la liste de personnes");
+            logger.error("Error getting the list of persons");
             return new ResponseEntity<List<Person>>(personList, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Succès lors de l'affichage de la liste de personnes");
+            logger.info("Success getting the list of persons");
             return new ResponseEntity<List<Person>>(personList, HttpStatus.FOUND);
         }
     }
@@ -46,13 +46,13 @@ public class PersonController {
      */
     @PostMapping("/person")
     public ResponseEntity<Person> addPerson(@RequestBody Person personToAdd){
-        logger.info("Requête POST sur l'endpoint /persons : ajout d'une personne");
+        logger.info("POST request on the endpoint /persons: adding a person");
         Person personAdded = personService.addPersonService(personToAdd);
         if(personAdded == null){
-            logger.error("Erreur lors de l'ajout de la personne");
+            logger.error("Error adding person");
             return new ResponseEntity<Person>(personAdded, HttpStatus.BAD_REQUEST);
         }else {
-            logger.info("Personne ajoutée avec succès");
+            logger.info("Success adding person");
             return new ResponseEntity<Person>(personAdded, HttpStatus.CREATED);
         }
     }
@@ -65,13 +65,13 @@ public class PersonController {
      */
     @PutMapping("/person")
     public ResponseEntity<Person> updatePerson(@RequestBody Person personToUpdate){
-        logger.info("Requête PUT sur l'endpoint /persons : modification d'une personne");
+        logger.info("PUT request on the endpoint /persons: updating a person");
         Person personUpdated = personService.updatePersonService(personToUpdate);
         if(personUpdated == null){
-            logger.error("Erreur lors de la modification de la personne");
+            logger.error("Error updating person");
             return new ResponseEntity<Person>(personUpdated, HttpStatus.NOT_FOUND);
         }else {
-            logger.info("Personne modifiée avec succès");
+            logger.info("Success updating person");
             return new ResponseEntity<Person>(personUpdated, HttpStatus.OK);
         }
     }
@@ -83,14 +83,14 @@ public class PersonController {
      */
     @DeleteMapping("/person")
     public ResponseEntity deletePerson(@RequestParam String firstName, @RequestParam String lastName){
-        logger.info("Requête DELETE sur l'endpoint /persons : suppression d'une personne");
+        logger.info("DELETE request on the endpoint /persons: deleting a person");
         boolean isDeleted = personService.removePersonService(firstName, lastName);
         if(isDeleted){
-            logger.info("Personne supprimée avec succès");
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            logger.info("Success deleting person");
+            return new ResponseEntity(HttpStatus.OK);
         }else {
-            logger.error("Erreur lors de la suppression de la personne");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            logger.error("Error deleting person");
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 }

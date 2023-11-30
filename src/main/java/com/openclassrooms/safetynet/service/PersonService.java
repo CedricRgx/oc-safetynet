@@ -26,7 +26,7 @@ public class PersonService {
      * @return the list of persons
      */
     public List<Person> getPersonsService(){
-        logger.info("Service d'envoi de la liste des personnes");
+        logger.info("Sending service of the list of persons");
         return jsonDatabase.getListOfPersons();
     }
 
@@ -36,8 +36,9 @@ public class PersonService {
      * @return person added
      */
     public Person addPersonService(Person person){
-        logger.info("Service d'ajout d'une personne");
+        logger.info("Adding service of a person");
         List<Person> personList = getPersonsService();
+        //Add a new person to the list of persons
         personList.add(person);
         jsonDatabase.setListOfPersons(personList);
         return person;
@@ -49,13 +50,14 @@ public class PersonService {
      * @return person updated or null
      */
     public Person updatePersonService(Person person){
-        logger.info("Service de modification d'une personne");
+        logger.info("Updating service of a person");
         List<Person> personList = getPersonsService();
+        //Retrieve the person to update from his firstname and his lastname
         Optional<Person> personOptional = personList.stream().filter(p -> p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName())).findAny();
         if(personOptional.isPresent()){
-            logger.info("Mise à jour de la personne");
+            logger.info("Update person");
             Person personUpdate = personOptional.get();
-            //Mise à jour des champs
+            //Update the phone, zip code, address, city, email and medical records of the person to update
             personUpdate.setPhone(person.getPhone());
             personUpdate.setZip(person.getZip());
             personUpdate.setAddress(person.getAddress());
@@ -63,21 +65,23 @@ public class PersonService {
             personUpdate.setEmail(person.getEmail());
             personUpdate.setMedicalRecord(person.getMedicalRecord());
         }else{
-            return null; //return null because the firstName and the lastName of the person hasn't founded
+            return null; //return null because the first and last name of the person to update were not found
         }
+        //Update of the list of person with the updated person
         jsonDatabase.setListOfPersons(personList);
         return person;
     }
 
     /**
      * This method removes a person in the list of persons
-     * @param firstName and lastName of the person to delete
+     * @param firstName
+     * @param lastName
      * @return true if the person is not in the list (success of deletion)
      */
     public boolean removePersonService(String firstName, String lastName){
-        logger.info("Service de suppression d'une personne");
+        logger.info("Deleting service of a person");
         List<Person> personList = getPersonsService();
-        return !personList.removeIf(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
+        //Delete the person from his firstname and his lastname
+        return personList.removeIf(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
     }
-
 }

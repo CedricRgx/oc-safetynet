@@ -47,30 +47,24 @@ public class SafetynetApplication {
 			JsonIterator iter = JsonIterator.parse(bytesFile);
 			Any any = iter.readAny();
 
-
 			//Loading Person data from file into JSONDatabase object
 			Any personAny = any.get("persons");
 			logger.info("Loading persons data from input file");
 			List<Person> personDatafile = initializePersons(personAny);
-			//personDatafile.forEach(p -> System.out.println(p.getFirstName().concat(p.getLastName()).concat(p.getAddress()).concat(p.getCity()).concat(p.getPhone()).concat(p.getZip()).concat(p.getEmail())));
 			//Populate the JsonDatabase object from data retrieved from the input file
 			jsonDatabase.setListOfPersons(personDatafile);
-
 
 			//Loading FireStation data from file into JSONDatabase object
 			Any fireStationAny = any.get("firestations");
 			logger.info("Loading fire stations data from input file");
 			List<FireStation> fireStationDatafile = initializeFireStation(fireStationAny);
-			//fireStationDatafile.forEach(p -> System.out.println(p.getAddress().concat(p.getStationNumber())));
 			//Populate the JsonDatabase object from data retrieved from the input file
 			jsonDatabase.setListOfFireStations(fireStationDatafile);
-
 
 			//Loading MedicalRecords data from file into JSONDatabase object
 			Any medicalRecordAny = any.get("medicalrecords");
 			logger.info("Loading medical records data from input file");
 			List<MedicalRecord> medicalrecordDatafile = initializeMedicalRecord(medicalRecordAny);
-			//medicalrecordsDatafile.forEach(p -> System.out.println(p.getFirstName().concat(p.getLastName()).concat(p.getBirthdate()).concat(p.getMedications().toString()).concat(p.getAllergies().toString())));
 			//Populate the JsonDatabase object from data retrieved from the input file
 			jsonDatabase.setListOfMedicalRecord(medicalrecordDatafile);
 
@@ -86,6 +80,7 @@ public class SafetynetApplication {
 	 */
 	private List<Person> initializePersons(Any personAny){
 		List<Person> persons = new ArrayList<>();
+		//Set the values of persons from the json data
 		personAny.forEach(a -> persons.add(Person.builder()
 				.firstName(a.get("firstName").toString())
 				.address(a.get("address").toString())
@@ -105,6 +100,7 @@ public class SafetynetApplication {
 	 */
 	private List<FireStation> initializeFireStation(Any fireStationAny){
 		List<FireStation> fireStations = new ArrayList<>();
+		//Set the values of fire stations from the json data
 		fireStationAny.forEach(a -> fireStations.add(FireStation.builder()
 				.address(a.get("address").toString())
 				.stationNumber(a.get("station").toString())
@@ -119,6 +115,7 @@ public class SafetynetApplication {
 	 */
 	private List<MedicalRecord> initializeMedicalRecord(Any medicalRecordAny){
 		List<MedicalRecord> medicalRecord = new ArrayList<>();
+		//Set the values of medical records from the json data
 		medicalRecordAny.forEach(a -> medicalRecord.add(MedicalRecord.builder()
 				.firstName(a.get("firstName").toString())
 				.lastName(a.get("lastName").toString())
@@ -137,6 +134,7 @@ public class SafetynetApplication {
 	private void loadMedicalRecordsIntoPerson(List<MedicalRecord> medicalrecordDatafile, List<Person> personDatafile){
 		String nameMedicalRecord;
 		String namePerson;
+		//Load medical record into the person object (owner of the medical record)
 		for(MedicalRecord medicalRecord:medicalrecordDatafile) {
 			nameMedicalRecord = medicalRecord.getFirstName().concat(medicalRecord.getLastName());
 			for(Person person:personDatafile) {
@@ -157,6 +155,7 @@ public class SafetynetApplication {
 	private void loadPersonIntoFirestation(List<Person> personDatafile, List<FireStation> firestationDatafile){
 		String adressPerson;
 		String adressFireStation;
+		//Load person into the person object (owner of the medical record)
 		Map<String, List<Person>> personGroupByAddress = personDatafile.stream().collect(Collectors.groupingBy(Person::getAddress)); //Regroup the persons by address
 		for(Map.Entry<String, List<Person>> entry : personGroupByAddress.entrySet()) {
 			adressPerson = entry.getKey();

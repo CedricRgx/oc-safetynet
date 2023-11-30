@@ -26,7 +26,7 @@ public class FireStationService {
      * @return the list of fire station
      */
     public List<FireStation> getFireStationService(){
-        logger.info("Service d'envoi de la liste des stations de pompiers");
+        logger.info("Sending service of the list of firestations");
         List<FireStation> listOfFireStation = jsonDatabase.getListOfFireStations();
         return listOfFireStation;
     }
@@ -37,8 +37,9 @@ public class FireStationService {
      * @return fire station added
      */
     public FireStation addFireStationService(FireStation fireStation){
-        logger.info("Service d'ajout d'une station de pompiers");
+        logger.info("Adding service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
+        //Add a new firestation to the list of fire stations
         fireStationList.add(fireStation);
         jsonDatabase.setListOfFireStations(fireStationList);
         return fireStation;
@@ -50,28 +51,33 @@ public class FireStationService {
      * @return fire station updated or null
      */
     public FireStation updateFireStationService(FireStation fireStation){
-        logger.info("Service de modification d'une station de pompiers");
+        logger.info("Updating service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
+        //Retrieve the firestation to update from its address
         Optional<FireStation> fireStationOptional = fireStationList.stream().filter(p -> p.getAddress().equals(fireStation.getAddress())).findAny();
         if(fireStationOptional.isPresent()){
+            logger.info("Update firestation");
             FireStation fireStationUpdate = fireStationOptional.get();
-            //Mise à jour des champs
+            //Update the station number of the firestation to update
             fireStationUpdate.setStationNumber(fireStation.getStationNumber());
         }else{
-            return null; //return null because the address of the fire station hasn't founded
+            return null; //return null because the address of the firestation to update were not found
         }
+        //Update of the list of firestation with the updated firestation
         jsonDatabase.setListOfFireStations(fireStationList);
         return fireStation;
     }
 
     /**
      * This method removes a fire station in the list of fire stations
-     * @param address and stationNumber of the fire station to delete
+     * @param address
+     * @param stationNumber
      * @return true if the fire station is not in the list (success of deletion)
      */
     public boolean removeFireStationService(String address, String stationNumber){
-        logger.info("Service de suppression d'une station de pompiers");
+        logger.info("Deleting service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
-        return !fireStationList.removeIf(p -> p.getAddress().equals(address) && p.getStationNumber().equals(stationNumber));
+        //Delete the firestation from its address and its station number
+        return fireStationList.removeIf(p -> p.getAddress().equals(address) && p.getStationNumber().equals(stationNumber));
     }
 }

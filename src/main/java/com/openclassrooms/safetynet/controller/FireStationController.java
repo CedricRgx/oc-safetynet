@@ -26,15 +26,15 @@ public class FireStationController {
      * This method send the list of firestations via the API (/firestation)
      * @return the list of firestations via API REST and the status code
      */
-    @GetMapping("/firestation")
+    @GetMapping("/firestations")
     public ResponseEntity<List<FireStation>> getFireStation() {
-        logger.info("Requête GET sur l'endpoint /firestation : envoi de la liste des stations de pompiers");
+        logger.info("GET request on the endpoint /firestations: getting the list of fire stations");
         List<FireStation> fireStationList = fireStationService.getFireStationService();
         if(fireStationList.isEmpty()){
-            logger.error("Erreur lors de l'affichage de la liste de stations de pompiers");
+            logger.error("Error getting the list of fire stations");
             return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Succès lors de l'affichage de la liste de stations de pompiers");
+            logger.info("Success getting the list of fire stations");
             return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.FOUND);
         }
     }
@@ -46,17 +46,16 @@ public class FireStationController {
      */
     @PostMapping("/firestation")
     public ResponseEntity<FireStation> addFireStation(@RequestBody FireStation fireStationtoAdd){
-        logger.info("Requête POST sur l'endpoint /firestation : ajout d'une station de pompiers");
+        logger.info("POST request on the endpoint /firestation: adding a fire station");
         FireStation fireStationAdded = fireStationService.addFireStationService(fireStationtoAdd);
         if(fireStationAdded == null){
-            logger.error("Erreur lors de l'ajout de la station de pompiers");
+            logger.error("Error adding fire station");
             return new ResponseEntity<FireStation>(fireStationAdded, HttpStatus.BAD_REQUEST);
         }else {
-            logger.info("Station de pompiers ajoutée avec succès");
+            logger.info("Success adding fire station");
             return new ResponseEntity<FireStation>(fireStationAdded, HttpStatus.CREATED);
         }
     }
-
 
     /**
      * This method update a fire station to the list of fire stations via the API (/firestation)
@@ -65,13 +64,13 @@ public class FireStationController {
      */
     @PutMapping("/firestation")
     public ResponseEntity<FireStation> updateFireStation(@RequestBody FireStation fireStationToUpdate){
-        logger.info("Requête PUT sur l'endpoint /firestation : modification d'une station de pompiers");
+        logger.info("PUT request on the endpoint /firestation: updating a fire station");
          FireStation fireStationUpdated = fireStationService.updateFireStationService(fireStationToUpdate);
         if(fireStationUpdated == null){
-            logger.error("Erreur lors de la modification de la station de pompiers");
+            logger.error("Error updating fire station");
             return new ResponseEntity<FireStation>(fireStationUpdated, HttpStatus.NOT_FOUND);
         }else {
-            logger.info("Station de pompiers modifiée avec succès");
+            logger.info("Success updating fire station");
             return new ResponseEntity<FireStation>(fireStationUpdated, HttpStatus.OK);
         }
     }
@@ -83,15 +82,14 @@ public class FireStationController {
      */
     @DeleteMapping("/firestation")
     public ResponseEntity deleteFireStation(@RequestParam(value="address") String address, @RequestParam(value="stationNumber") String stationNumber){
-        logger.info("Requête DELETE sur l'endpoint /firestation : suppression d'une station de pompiers");
+        logger.info("DELETE request on the endpoint /firestation: deleting a fire station");
         boolean isDeleted = fireStationService.removeFireStationService(address, stationNumber);
         if(isDeleted){
-            logger.info("Station de pompiers supprimée avec succès");
-            return new ResponseEntity(HttpStatus.NO_CONTENT);
+            logger.info("Success deleting fire station");
+            return new ResponseEntity(HttpStatus.OK);
         }else {
-
-            logger.error("Erreur lors de la suppression de la station de pompiers");
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            logger.error("Error deleting fire station");
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
 }

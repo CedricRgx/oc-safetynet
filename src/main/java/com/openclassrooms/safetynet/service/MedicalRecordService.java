@@ -26,7 +26,7 @@ public class MedicalRecordService {
      * @return the list of medical records
      */
     public List<MedicalRecord> getMedicalRecordsService(){
-        logger.info("Service d'envoi de la liste des dossiers médicaux");
+        logger.info("Sending service of the list of medical records");
         return jsonDatabase.getListOfMedicalRecord();
     }
 
@@ -36,8 +36,9 @@ public class MedicalRecordService {
      * @return medical record added
      */
     public MedicalRecord addMedicalRecordService(MedicalRecord medicalRecord){
-        logger.info("Service d'ajout d'un dossier médical");
+        logger.info("Adding service of a medical record");
         List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
+        //Add a new medical record to the list of medical records
         medicalRecordList.add(medicalRecord);
         jsonDatabase.setListOfMedicalRecord(medicalRecordList);
         return medicalRecord;
@@ -49,30 +50,35 @@ public class MedicalRecordService {
      * @return medical record updated or null
      */
     public MedicalRecord updateMedicalRecordService(MedicalRecord medicalRecord){
-        logger.info("Service de modification d'un dossier médical");
+        logger.info("Updating service of a medical record");
         List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
+        //Retrieve the medical record to update from the firstname and the lastname of his owner
         Optional<MedicalRecord> medicalRecordOptional = medicalRecordList.stream().filter(p -> p.getFirstName().equals(medicalRecord.getFirstName()) && p.getLastName().equals(medicalRecord.getLastName())).findAny();
         if(medicalRecordOptional.isPresent()){
+            logger.info("Update medical record");
             MedicalRecord medicalRecordUpdate = medicalRecordOptional.get();
-            //Mise à jour des champs
+            //Update the birthdate, list of medications, list of allergies of the medical record to update
             medicalRecordUpdate.setBirthdate(medicalRecord.getBirthdate());
             medicalRecordUpdate.setMedications(medicalRecord.getMedications());
             medicalRecordUpdate.setAllergies(medicalRecord.getAllergies());
         }else{
-            return null; //return null because the firstName and the lastName of the medical record hasn't founded
+            return null; //return null because the first and last name of the medical record to update were not found
         }
+        //Update of the list of medical record with the updated medical record
         jsonDatabase.setListOfMedicalRecord(medicalRecordList);
         return medicalRecord;
     }
 
     /**
      * This method removes a medical record in the list of medical records
-     * @param firstName and lastName of the medical record to delete
+     * @param firstName
+     * @param lastName
      * @return true if the medical record is not in the list (success of deletion)
      */
     public boolean removeMedicalRecordService(String firstName, String lastName){
-        logger.info("Service de suppression d'un dossier médical");
+        logger.info("Deleting service of a medical record");
         List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
-        return !medicalRecordList.removeIf(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName));
+        //Delete the medical record from the firstname and the lastname of his owner
+        return medicalRecordList.removeIf(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName));
     }
 }
