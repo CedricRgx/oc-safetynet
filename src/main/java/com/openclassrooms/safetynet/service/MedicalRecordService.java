@@ -71,8 +71,8 @@ public class MedicalRecordService {
 
     /**
      * This method removes a medical record in the list of medical records
-     * @param firstName
-     * @param lastName
+     * @param firstName of the owner of the medical record to have to remove
+     * @param lastName of the owner of the medical record to have to remove
      * @return true if the medical record is not in the list (success of deletion)
      */
     public boolean removeMedicalRecordService(String firstName, String lastName){

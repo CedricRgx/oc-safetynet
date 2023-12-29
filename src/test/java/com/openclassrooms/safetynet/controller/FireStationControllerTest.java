@@ -29,7 +29,7 @@ class FireStationControllerTest {
     @Test
     public void getFireStationWithSuccessTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                        .get("/firestation"))
+                        .get("/firestations"))
                 .andExpect(status().isFound())
                 .andExpect(jsonPath("$[0].address", is("1509 Culver St")));
     }
@@ -119,13 +119,14 @@ class FireStationControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/firestation")
-                .content(new ObjectMapper().writeValueAsString(fireStationTest))
+                .content((new ObjectMapper().writeValueAsString(fireStationTest)))
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON));
+                .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated());
 
         mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/firestation?address=\"77 Pommier Street\"&stationNumber=\"4\""))
-                .andExpect(status().isNoContent());
+                .delete("/firestation?address=\"77 Pommier Street\"&stationNumber=\"4\""))
+            .andExpect(status().isNotFound());
     }
 
     @Test

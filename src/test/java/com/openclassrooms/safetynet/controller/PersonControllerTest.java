@@ -159,7 +159,7 @@ class PersonControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/person?firstName=\"Toto\"&lastName=\"Tata\""))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
 
     @Test

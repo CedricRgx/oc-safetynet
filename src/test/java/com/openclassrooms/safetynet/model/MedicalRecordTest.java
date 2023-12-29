@@ -20,7 +20,6 @@ class MedicalRecordTest {
     private static MedicalRecord medicalRecordTest;
 
     String valueToTest;
-
     List<String> listToTest;
 
     @BeforeAll

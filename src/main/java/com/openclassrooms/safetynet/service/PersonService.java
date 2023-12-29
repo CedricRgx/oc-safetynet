@@ -74,8 +74,8 @@ public class PersonService {
 
     /**
      * This method removes a person in the list of persons
-     * @param firstName
-     * @param lastName
+     * @param firstName of the person to have to remove
+     * @param lastName of the person to have to remove
      * @return true if the person is not in the list (success of deletion)
      */
     public boolean removePersonService(String firstName, String lastName){

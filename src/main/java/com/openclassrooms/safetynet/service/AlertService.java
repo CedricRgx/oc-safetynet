@@ -10,9 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,17 +24,100 @@ public class AlertService {
     private JSONDatabase jsonDatabase;
 
     /**
+     * This method returns a list of persons for an address
+     * @param address to retrieve the list of persons
+     * @return the list of persons who have the same address
+     */
+    public List<Person> getListOfPersonsByAddress(String address){
+        logger.info("Retrieve a list of person who have the same address");
+        return jsonDatabase.getListOfPersons()
+                .stream()
+                .filter(p -> p.getAddress()
+                        .equals(address))
+                .toList();
+    }
+
+    /**
+     * This method returns a list of persons for a city
+     * @param city to retrieve the list of persons
+     * @return the list of persons who live in the same city
+     */
+    public List<String> getListOfPersonsByCity(String city){
+        logger.info("Retrieve a list of person who have the same address");
+        return jsonDatabase.getListOfPersons()
+                .stream()
+                .filter(p -> city.equals(p.getCity()) && p.getEmail() != null) // Null check to avoid NullPointerException
+                .map(Person::getEmail)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * This method returns a list of firestations from a station number
+     * @param stationNumber to retrieve the list of fire stations
+     * @return the list of fire stations which have the same station number
+     */
+    public List<FireStation> getListOfFireStationsByStationNumber(String stationNumber){
+        logger.info("Retrieve a list of fire stations which have the same station number");
+        return jsonDatabase.getListOfFireStations()
+                .stream()
+                .filter(f -> f.getStationNumber()
+                        .equals(stationNumber))
+                .toList();
+    }
+
+    /**
+     * This method returns a list of firestations from an address
+     * @param address to retrieve the list of fire stations
+     * @return the list of fire stations which have the same address
+     */
+    public List<FireStation> getListOfFireStationsByAddress(String address){
+        logger.info("Retrieve a list of fire stations which have the same address");
+        return jsonDatabase.getListOfFireStations()
+                .stream()
+                .filter(f -> f.getAddress()
+                        .equals(address))
+                .toList();
+    }
+
+    /**
+     * This method returns a list of persons who share the same fire station
+     * @param stationNumber for the list of persons who share the same fire station
+     * @return the list of persons who share the same fire station
+     */
+    public List<PersonByStationNumberDTO> getListOfPersonByStationNumberDTO(String stationNumber){
+        logger.info("Creation of the list of people by station number");
+        List<Person> listOfPersons = jsonDatabase.getListOfPersons();
+        List<PersonByStationNumberDTO> listOfPersonByStationNumberDTO = new ArrayList<>();
+        List<FireStation> listOfFireStationsByStationNumber = getListOfFireStationsByStationNumber(stationNumber);
+
+        //Retrieve the persons by station number from their address
+        for(FireStation fs:listOfFireStationsByStationNumber) {
+            for(Person p:listOfPersons) {
+                if(p.getAddress().equals(fs.getAddress())) {
+                    //Put the PersonByStationNumberDTO in the list listOfPersonByStationNumberDTO
+                    listOfPersonByStationNumberDTO.add(PersonByStationNumberDTO.builder()
+                            .firstName(p.getFirstName())
+                            .lastName(p.getLastName())
+                            .address(p.getAddress())
+                            .phone(p.getPhone())
+                            .birthday(p.getMedicalRecord().getBirthdate()).build());
+                }
+            }
+        }
+        return listOfPersonByStationNumberDTO;
+    }
+
+    /**
      * This method returns the DTO which contains the list of persons with the number of adults and children from a station number
-     * @param stationNumber
+     * @param stationNumber for the list of persons
      * @return a DTO which contains the list of persons with the number of adults and children
      */
     public PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO getPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenService(String stationNumber) {
         logger.info("Sending service for the list of persons by station number with number of adults and number of children");
         //Get the list of persons with the number of adults and children from a station number
         List<PersonByStationNumberDTO> listOfPersonByStationNumberDTO = getListOfPersonByStationNumberDTO(stationNumber);
-        PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO personsDTO = new PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO();
         List<String> listOfBirthdays = new ArrayList<>();
-        //Rretrieve the birthdate of a list of person
+        //Retrieve the birthdate of a list of person
         for(PersonByStationNumberDTO personDTO:listOfPersonByStationNumberDTO){
             listOfBirthdays.add(personDTO.getBirthday());
         }
@@ -45,182 +126,127 @@ public class AlertService {
         int nbAdults = calculator.getNumberOfAdults(listOfBirthdays);
         //Calculate the number of children from the list of birthdate
         int nbChildren = calculator.getNumberOfChildren(listOfBirthdays);
-        //Set the attributes of personsDTO
-        personsDTO.setNumberOfAdults(nbAdults);
-        personsDTO.setNumberOfChildren(nbChildren);
-        personsDTO.setListOfPersonsByStationNumber(listOfPersonByStationNumberDTO);
-        return personsDTO;
-    }
-
-    /**
-     * This method returns a list of persons who share the same fire station
-     * @param stationNumber
-     * @return the list of persons who share the same fire station
-     */
-    public List<PersonByStationNumberDTO> getListOfPersonByStationNumberDTO(String stationNumber){
-        logger.info("Creation of the list of people by station number");
-        List<FireStation> listOfFireStations = jsonDatabase.getListOfFireStations();
-        List<Person> listOfPersons = jsonDatabase.getListOfPersons();
-        List<PersonByStationNumberDTO> listOfPersonByStationNumberDTO = new ArrayList<>();
-        //Retrieve the persons by station number from their address
-        for(FireStation fs:listOfFireStations) {
-            if(fs.getStationNumber().equals(stationNumber)) {
-                for(Person p : listOfPersons) {
-                    if(p.getAddress().equals(fs.getAddress())) {
-                        PersonByStationNumberDTO person = new PersonByStationNumberDTO();
-                        person.setFirstName(p.getFirstName());
-                        person.setLastName(p.getLastName());
-                        person.setAddress(p.getAddress());
-                        person.setPhone(p.getPhone());
-                        person.setBirthday(p.getMedicalRecord().getBirthdate());
-                        //Put the PersonByStationNumberDTO in the list listOfPersonByStationNumberDTO
-                        listOfPersonByStationNumberDTO.add(person);
-                    }
-                }
-            }
-        }
-        return listOfPersonByStationNumberDTO;
+        //Return an DTO object with the attributes
+        return PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO.builder()
+                .numberOfAdults(nbAdults)
+                .numberOfChildren(nbChildren)
+                .listOfPersonsByStationNumber(listOfPersonByStationNumberDTO).build();
     }
 
     /**
      * This method returns a list of children with the others members of the household
-     * @param address
+     * @param address of the household
      * @return the list of children with the others members of the household
      */
     public List<ChildrenWithOthersMembersOfHouseholdDTO> getChildrenWithOthersMembersOfHouseholdService(String address){
-        logger.info("");
+        logger.info("Creation of the list of children with the others members of the household");
         List<ChildrenWithOthersMembersOfHouseholdDTO> listOfChildrenWithOthersMembersOfHousehold = new ArrayList<>();
-        List<OthersMembersOfTheHouseholdDTO> listOfAdults = new ArrayList<>();
-        //Get the list of persons living at the same address
-        List<Person> listOfPersonByAddress = getListPersonsByAddress(address);
-        String birthday;
         Calculator calculate = new Calculator();
+        List<OthersMembersOfTheHouseholdDTO> listOfOtherMemberHouseHold;
+        //Get the list of persons living at the same address
+        List<Person> listOfPersonByAddress = getListOfPersonsByAddress(address);
+
         //Sort the members of a household into children and adults by calculating their ages
         for(Person p:listOfPersonByAddress) {
-            birthday = p.getMedicalRecord().getBirthdate();
-            if(p.getAddress().equals(address)) {
-                if(calculate.isChild(birthday)) {
-                    listOfChildrenWithOthersMembersOfHousehold.add(new ChildrenWithOthersMembersOfHouseholdDTO(p.getFirstName(), p.getLastName(), birthday, p.getAddress(), new ArrayList<>()));
-                } else {
-                    listOfAdults.add(new OthersMembersOfTheHouseholdDTO(p.getFirstName(), p.getLastName(), p.getAddress()));
+            //Identify a child of the list of persons
+            if(calculate.isChild(p.getMedicalRecord().getBirthdate())) {
+                listOfOtherMemberHouseHold = new ArrayList<>();
+                String firstNameChild = p.getFirstName();
+                String lastNameChild = p.getLastName();
+
+                //Put the others members of household in another list
+                for(Person m:listOfPersonByAddress){
+                    if(!(m.getFirstName().equals(firstNameChild) && m.getLastName().equals(lastNameChild))){
+                        listOfOtherMemberHouseHold.add(OthersMembersOfTheHouseholdDTO.builder()
+                                .firstName(m.getFirstName())
+                                .lastName(m.getLastName())
+                                .address(m.getAddress()).build());
+                    }
                 }
+                //Initialize the child DTO and put the list of others members of the household as an attribute of the child DTO
+                listOfChildrenWithOthersMembersOfHousehold.add(ChildrenWithOthersMembersOfHouseholdDTO.builder()
+                        .firstName(firstNameChild)
+                        .lastName(lastNameChild)
+                        .age(calculate.calculateAge(p.getMedicalRecord().getBirthdate()))
+                        .address(p.getAddress())
+                        .listOfOthersMembersOfTheHouseholdDTO(listOfOtherMemberHouseHold).build());
             }
-        }
-        //Set the list of adult linked to a child
-        for(ChildrenWithOthersMembersOfHouseholdDTO child:listOfChildrenWithOthersMembersOfHousehold){
-            List<OthersMembersOfTheHouseholdDTO> listOfOthersMembersOfTheHouseholdDTO = new ArrayList<>();
-            for(OthersMembersOfTheHouseholdDTO adult:listOfAdults){
-                    listOfOthersMembersOfTheHouseholdDTO.add(adult);
-            }
-            child.setListOfOthersMembersOfTheHouseholdDTO(listOfOthersMembersOfTheHouseholdDTO);
         }
         return listOfChildrenWithOthersMembersOfHousehold;
     }
 
     /**
-     * This method returns a list of persons who have the same address
-     * @param address
-     * @return the list of persons who have the same address
-     */
-    public List<Person> getListPersonsByAddress(String address){
-        logger.info("Sending service for the list of persons by address");
-        List<Person> listOfPersons = jsonDatabase.getListOfPersons();
-        List<Person> listOfPersonsByAddress = new ArrayList<>();
-        //Retrieve a person from his address
-        for(Person p:listOfPersons){
-            if(p.getAddress().equals(address)){
-                //Add the person to the list of persons living at the same address
-                listOfPersonsByAddress.add(p);
-            }
-        }
-        return listOfPersonsByAddress;
-    }
-
-    /**
      * This method returns a list of phones of persons living near a firestation
-     * @param stationNumber
+     * @param stationNumber of the firestation
      * @return the list of phones of persons living near a firestation
      */
-    public List<PhonesOfResidentsByFireStationDTO> getPhonesOfResidentsByFireStationService(String stationNumber){
+    public Set<String> getPhonesOfResidentsByFireStationService(String stationNumber){
         logger.info("Sending service for the list of phones of persons living near a firestation");
-        List<FireStation> listOfFireStations = jsonDatabase.getListOfFireStations();
+        List<FireStation> listOfFireStationsByStationNumber = getListOfFireStationsByStationNumber(stationNumber);
         List<Person> listOfPersons = jsonDatabase.getListOfPersons();
-        List<PhonesOfResidentsByFireStationDTO> listOfPhones = new ArrayList<>();
+        Set<String> listOfPhones = new HashSet<>();
         //Retrieve the address of a person from the station number of a fire station
-        for(FireStation fs:listOfFireStations) {
-            if(fs.getStationNumber().equals(stationNumber)) {
-                for(Person p : listOfPersons) {
-                    if(p.getAddress().equals(fs.getAddress())) {
-                        PhonesOfResidentsByFireStationDTO phone = new PhonesOfResidentsByFireStationDTO();
-                        phone.setPhone(p.getPhone());
-                        phone.setStationNumber(fs.getStationNumber());
-                        //Add the phone number to the list of phone numbers
-                        listOfPhones.add(phone);
-                    }
+        for(FireStation fs:listOfFireStationsByStationNumber) {
+            for(Person p : listOfPersons) {
+                if(p.getAddress().equals(fs.getAddress())) {
+                    //Add the phone number to the list of phone numbers
+                    listOfPhones.add(p.getPhone());
                 }
             }
         }
-        //Removing duplicate phone numbers from the list to avoid several calls or sms to the same phone number
-        listOfPhones = listOfPhones.stream().distinct().collect(Collectors.toList());
         return listOfPhones;
     }
 
-
-
     /**
      * This method returns a list of person living at an address and the fire station number for this address
-     * @param address
+     * @param address of a list of persons and a firestation
      * @return a list of person living at an address and the fire station number for this address
      */
     public PersonsByAddressWithFireStationNumberDTO getPersonsByAddressAndFireStationService(String address){
         logger.info("Sending service for the list of person living at an address and the fire station number for this address");
-        PersonsByAddressWithFireStationNumberDTO personsByAddressWithFireStationNumberDTO = new PersonsByAddressWithFireStationNumberDTO();
-        List<PersonByAddressDTO> listOfPersonsByAddress = new ArrayList<>();
-
-        List<Person> listOfPersons = jsonDatabase.getListOfPersons();
+        List<PersonByAddressDTO> listOfPersonsByTheSameAddress = new ArrayList<>();
+        Calculator calculate = new Calculator();
+        List<Person> listOfPersonsByAddress = getListOfPersonsByAddress(address);
+        String stationNumber = null;
         //Retrieve the person from his address
-        for(Person p:listOfPersons) {
-            if(p.getAddress().equals(address)) {
-                PersonByAddressDTO person = new PersonByAddressDTO();
-                person.setFirstName(p.getFirstName());
-                person.setLastName(p.getLastName());
-                person.setAddress(address);
-                person.setPhone(p.getPhone());
-                person.setAge(new Calculator().calculateAge(p.getMedicalRecord().getBirthdate()));
-                person.setMedications(p.getMedicalRecord().getMedications());
-                person.setAllergies(p.getMedicalRecord().getAllergies());
-                //Put the PersonByAddressDTO in the list listOfPersonsByAddress
-                listOfPersonsByAddress.add(person);
-            }
+        for(Person p:listOfPersonsByAddress) {
+            //Put the PersonByAddressDTO in the list listOfPersonsByAddress
+            listOfPersonsByTheSameAddress.add(PersonByAddressDTO.builder()
+                .firstName(p.getFirstName())
+                .lastName(p.getLastName())
+                .address(p.getAddress())
+                .phone(p.getPhone())
+                .age(calculate.calculateAge(p.getMedicalRecord().getBirthdate()))
+                .medications(p.getMedicalRecord().getMedications())
+                .allergies(p.getMedicalRecord().getAllergies())
+                .build()
+            );
         }
-        personsByAddressWithFireStationNumberDTO.setListOfPersonsByAddress(listOfPersonsByAddress);
-
-        List<FireStation> listOfFireStations = jsonDatabase.getListOfFireStations();
-        List<String> listOfStationNumber = new ArrayList<>();
-        //Retrieve the station number of fire station from its address
-        for(FireStation fs:listOfFireStations){
-            if(fs.getAddress().equals(address)){
-                //Put the station number in the list of address of station number
-                listOfStationNumber.add(fs.getStationNumber());
-            }
+        Optional<FireStation> fireStationOptional = jsonDatabase.getListOfFireStations()
+                .stream()
+                .filter(p -> p.getAddress().equals(address)).findAny();
+        if(fireStationOptional.isPresent()){
+            stationNumber = fireStationOptional.get().getStationNumber();
         }
         //Add the list of station number in the list of persons personsByAddressWithFireStationNumberDTO
-        personsByAddressWithFireStationNumberDTO.setListOfStationNumber(listOfStationNumber);
-        return personsByAddressWithFireStationNumberDTO;
+        return PersonsByAddressWithFireStationNumberDTO.builder()
+                .listOfPersonsByAddress(listOfPersonsByTheSameAddress)
+                .stationNumber(stationNumber).build();
     }
 
     /**
      * This method returns a list of person living at an address and the fire station number for the list of fire stations
-     * @param listOfStationNumbers
+     * @param listOfStationNumbers for a list of person
      * @return a list of person living at an address and the fire station number for the list of fire stations
      */
-    public List<PersonByAddressForListOfStationNumbersDTO> getPersonsByStationNumberService(List<String> listOfStationNumbers){
+    public List<PersonByAddressDTO> getPersonsByStationNumberService(List<String> listOfStationNumbers){
         logger.info("Sending service for the list of person living at an address and the fire station number for the list of fire stations");
-        List<PersonByAddressForListOfStationNumbersDTO> listOfPersonByAddressForListOfStationNumbers = new ArrayList<>();
+        List<PersonByAddressDTO> listOfPersonByAddressForListOfStationNumbers = new ArrayList<>();
 
         //Retrieve an address list that matches the station numbers on the fire station list
         List<FireStation> listOfFireStations = jsonDatabase.getListOfFireStations();
         List<String> listOfAddressOfFireStations = new ArrayList<>();
+        Calculator calculate = new Calculator();
         //Retrieve the address of fire station from its station number
         for(String lsn:listOfStationNumbers){
             for(FireStation fs:listOfFireStations){
@@ -235,30 +261,30 @@ public class AlertService {
         for(String afs:listOfAddressOfFireStations) {
             for(Person p : listOfPersons) {
                 if(p.getAddress().equals(afs)) {
-                    PersonByAddressForListOfStationNumbersDTO person = new PersonByAddressForListOfStationNumbersDTO();
-                    person.setAddress(p.getAddress());
-                    person.setFirstName(p.getFirstName());
-                    person.setLastName(p.getLastName());
-                    person.setPhone(p.getPhone());
-                    person.setAge(new Calculator().calculateAge(p.getMedicalRecord().getBirthdate()));
-                    person.setMedications(p.getMedicalRecord().getMedications());
-                    person.setAllergies(p.getMedicalRecord().getAllergies());
                     //Put the PersonByAddressForListOfStationNumbersDTO in the list listOfPersonByAddressForListOfStationNumbers
-                    listOfPersonByAddressForListOfStationNumbers.add(person);
+                    listOfPersonByAddressForListOfStationNumbers.add(PersonByAddressDTO.builder()
+                            .address(p.getAddress())
+                            .firstName(p.getFirstName())
+                            .lastName(p.getLastName())
+                            .phone(p.getPhone())
+                            .age(calculate.calculateAge(p.getMedicalRecord().getBirthdate()))
+                            .medications(p.getMedicalRecord().getMedications())
+                            .allergies(p.getMedicalRecord().getAllergies())
+                            .build());
                 }
             }
         }
         //Sort the items of the list by address value and age value
-        listOfPersonByAddressForListOfStationNumbers.sort(Comparator.comparing(PersonByAddressForListOfStationNumbersDTO::getAddress)
-                .thenComparing(PersonByAddressForListOfStationNumbersDTO::getAge));
+        listOfPersonByAddressForListOfStationNumbers.sort(Comparator.comparing(PersonByAddressDTO::getAddress)
+                .thenComparing(PersonByAddressDTO::getAge));
         return listOfPersonByAddressForListOfStationNumbers;
     }
 
     /**
-     * This method returns a list of informations about a person or several persons (if they shares the same firstname and lastname)
-     * @param firstName
-     * @param lastName
-     * @return a list of informations about a person or several persons
+     * This method returns a list of information about a person or several persons (if they share the same firstname and lastname)
+     * @param firstName of a person
+     * @param lastName of a person
+     * @return a list of information about a person or several persons
      */
     public List<PersonInfoDTO> getInfoAboutPersonService(String firstName, String lastName){
         logger.info("Sending service for the list of informations about a person");
@@ -267,16 +293,16 @@ public class AlertService {
         //Retrieve the values of the PersonInfoDTO attributes for a person from his firstname and lastname
         for(Person p : listOfPersons) {
             if(p.getFirstName().equals(firstName) && p.getLastName().equals(lastName)) {
-                PersonInfoDTO infoPerson = new PersonInfoDTO();
-                infoPerson.setFirstName(firstName);
-                infoPerson.setLastName(lastName);
-                infoPerson.setAddress(p.getAddress());
-                infoPerson.setAge(new Calculator().calculateAge(p.getMedicalRecord().getBirthdate()));
-                infoPerson.setEmail(p.getEmail());
-                infoPerson.setMedications(p.getMedicalRecord().getMedications());
-                infoPerson.setAllergies(p.getMedicalRecord().getAllergies());
                 //Put the PersonInfoDTO in the list listOfInfoPerson
-                listOfInfoPerson.add(infoPerson);
+                listOfInfoPerson.add(PersonInfoDTO.builder()
+                    .firstName(firstName)
+                    .lastName(lastName)
+                    .address(p.getAddress())
+                    .age(new Calculator().calculateAge(p.getMedicalRecord().getBirthdate()))
+                    .email(p.getEmail())
+                    .medications(p.getMedicalRecord().getMedications())
+                    .allergies(p.getMedicalRecord().getAllergies())
+                    .build());
             }
         }
         return listOfInfoPerson;
@@ -284,23 +310,11 @@ public class AlertService {
 
     /**
      * This method returns a list of emails of persons who live in the same city
-     * @param city
+     * @param city for a list of person live here
      * @return the list of emails of persons who live in the same city
      */
-    public List<EmailFromPersonsInCityDTO> getEmailFromPersonsInCityService(String city) {
+    public List<String> getEmailFromPersonsInCityService(String city) {
         logger.info("Sending service for the list of emails of persons who live in the same city");
-        List<Person> listOfPersons = jsonDatabase.getListOfPersons();
-        List<EmailFromPersonsInCityDTO> listOfEmailFromPersonsInCity = new ArrayList<>();
-        //Retrieve the values of the EmailFromPersonsInCityDTO attributes for a person living in the same city
-        for(Person p:listOfPersons) {
-            if(p.getCity().equals(city)){
-                EmailFromPersonsInCityDTO emailFromPersonsInCityDTO = new EmailFromPersonsInCityDTO();
-                emailFromPersonsInCityDTO.setEmail(p.getEmail());
-                emailFromPersonsInCityDTO.setCity(city);
-                //Put the emailFromPersonsInCityDTO in the list listOfEmailFromPersonsInCity
-                listOfEmailFromPersonsInCity.add(emailFromPersonsInCityDTO);
-            }
-        }
-        return listOfEmailFromPersonsInCity;
+        return getListOfPersonsByCity(city);
     }
 }

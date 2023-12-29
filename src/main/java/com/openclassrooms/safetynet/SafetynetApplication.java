@@ -16,7 +16,10 @@ import org.springframework.context.annotation.Bean;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -34,7 +37,6 @@ public class SafetynetApplication {
 		SpringApplication.run(SafetynetApplication.class, args);
 		System.out.println("SafetyNet application is UP !");
 	}
-
 
 	@Bean
 	CommandLineRunner runner(){

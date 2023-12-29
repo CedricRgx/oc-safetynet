@@ -70,8 +70,8 @@ public class FireStationService {
 
     /**
      * This method removes a fire station in the list of fire stations
-     * @param address
-     * @param stationNumber
+     * @param address of the firestation to have to remove
+     * @param stationNumber of the firestation to have to remove
      * @return true if the fire station is not in the list (success of deletion)
      */
     public boolean removeFireStationService(String address, String stationNumber){

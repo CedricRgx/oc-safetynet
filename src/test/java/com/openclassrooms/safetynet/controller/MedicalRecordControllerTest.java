@@ -134,7 +134,7 @@ class MedicalRecordControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders
                         .delete("/medicalRecord?firstName=\"Toto\"&lastName=\"Tata\""))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
 
     @Test

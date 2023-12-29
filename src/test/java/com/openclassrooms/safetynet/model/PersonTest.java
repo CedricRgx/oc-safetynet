@@ -18,7 +18,6 @@ class PersonTest {
     private static final Logger logger = LogManager.getLogger("PersonTest");
 
     private static Person personTest;
-
     String valueToTest;
 
     @BeforeAll
