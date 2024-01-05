@@ -27,6 +27,7 @@ public class FireStationService {
      */
     public List<FireStation> getFireStationService(){
         logger.info("Sending service of the list of firestations");
+        logger.debug("Sending service of the list of firestations");
         List<FireStation> listOfFireStation = jsonDatabase.getListOfFireStations();
         return listOfFireStation;
     }
@@ -38,6 +39,7 @@ public class FireStationService {
      */
     public FireStation addFireStationService(FireStation fireStation){
         logger.info("Adding service of a fire station");
+        logger.debug("Adding service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
         //Add a new firestation to the list of fire stations
         fireStationList.add(fireStation);
@@ -52,11 +54,13 @@ public class FireStationService {
      */
     public FireStation updateFireStationService(FireStation fireStation){
         logger.info("Updating service of a fire station");
+        logger.debug("Updating service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
         //Retrieve the firestation to update from its address
         Optional<FireStation> fireStationOptional = fireStationList.stream().filter(p -> p.getAddress().equals(fireStation.getAddress())).findAny();
         if(fireStationOptional.isPresent()){
             logger.info("Update firestation");
+            logger.debug("Update firestation");
             FireStation fireStationUpdate = fireStationOptional.get();
             //Update the station number of the firestation to update
             fireStationUpdate.setStationNumber(fireStation.getStationNumber());
@@ -76,6 +80,7 @@ public class FireStationService {
      */
     public boolean removeFireStationService(String address, String stationNumber){
         logger.info("Deleting service of a fire station");
+        logger.debug("Deleting service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
         //Delete the firestation from its address and its station number
         return fireStationList.removeIf(p -> p.getAddress().equals(address) && p.getStationNumber().equals(stationNumber));

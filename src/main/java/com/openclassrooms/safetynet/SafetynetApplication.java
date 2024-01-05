@@ -44,6 +44,7 @@ public class SafetynetApplication {
 
 			//Loading and reading the file
 			logger.info("Loading and reading the input json file");
+			logger.debug("Loading and reading the input json file");
 			byte[] bytesFile = Files.readAllBytes(new File("src/main/resources/data.json").toPath());
 			//Iteration over file data
 			JsonIterator iter = JsonIterator.parse(bytesFile);

@@ -27,6 +27,7 @@ public class MedicalRecordService {
      */
     public List<MedicalRecord> getMedicalRecordsService(){
         logger.info("Sending service of the list of medical records");
+        logger.debug("Sending service of the list of medical records");
         return jsonDatabase.getListOfMedicalRecord();
     }
 
@@ -37,6 +38,7 @@ public class MedicalRecordService {
      */
     public MedicalRecord addMedicalRecordService(MedicalRecord medicalRecord){
         logger.info("Adding service of a medical record");
+        logger.debug("Adding service of a medical record");
         List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
         //Add a new medical record to the list of medical records
         medicalRecordList.add(medicalRecord);
@@ -51,11 +53,13 @@ public class MedicalRecordService {
      */
     public MedicalRecord updateMedicalRecordService(MedicalRecord medicalRecord){
         logger.info("Updating service of a medical record");
+        logger.debug("Updating service of a medical record");
         List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
         //Retrieve the medical record to update from the firstname and the lastname of his owner
         Optional<MedicalRecord> medicalRecordOptional = medicalRecordList.stream().filter(p -> p.getFirstName().equals(medicalRecord.getFirstName()) && p.getLastName().equals(medicalRecord.getLastName())).findAny();
         if(medicalRecordOptional.isPresent()){
             logger.info("Update medical record");
+            logger.debug("Update medical record");
             MedicalRecord medicalRecordUpdate = medicalRecordOptional.get();
             //Update the birthdate, list of medications, list of allergies of the medical record to update
             medicalRecordUpdate.setBirthdate(medicalRecord.getBirthdate());
@@ -77,6 +81,7 @@ public class MedicalRecordService {
      */
     public boolean removeMedicalRecordService(String firstName, String lastName){
         logger.info("Deleting service of a medical record");
+        logger.debug("Deleting service of a medical record");
         List<MedicalRecord> medicalRecordList = getMedicalRecordsService();
         //Delete the medical record from the firstname and the lastname of his owner
         return medicalRecordList.removeIf(m -> m.getFirstName().equals(firstName) && m.getLastName().equals(lastName));

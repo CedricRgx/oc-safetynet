@@ -27,6 +27,7 @@ public class PersonService {
      */
     public List<Person> getPersonsService(){
         logger.info("Sending service of the list of persons");
+        logger.debug("Sending service of the list of persons");
         return jsonDatabase.getListOfPersons();
     }
 
@@ -37,6 +38,7 @@ public class PersonService {
      */
     public Person addPersonService(Person person){
         logger.info("Adding service of a person");
+        logger.debug("Adding service of a person");
         List<Person> personList = getPersonsService();
         //Add a new person to the list of persons
         personList.add(person);
@@ -51,11 +53,13 @@ public class PersonService {
      */
     public Person updatePersonService(Person person){
         logger.info("Updating service of a person");
+        logger.debug("Updating service of a person");
         List<Person> personList = getPersonsService();
         //Retrieve the person to update from his firstname and his lastname
         Optional<Person> personOptional = personList.stream().filter(p -> p.getFirstName().equals(person.getFirstName()) && p.getLastName().equals(person.getLastName())).findAny();
         if(personOptional.isPresent()){
             logger.info("Update person");
+            logger.debug("Update person");
             Person personUpdate = personOptional.get();
             //Update the phone, zip code, address, city, email and medical records of the person to update
             personUpdate.setPhone(person.getPhone());
@@ -80,6 +84,7 @@ public class PersonService {
      */
     public boolean removePersonService(String firstName, String lastName){
         logger.info("Deleting service of a person");
+        logger.debug("Deleting service of a person");
         List<Person> personList = getPersonsService();
         //Delete the person from his firstname and his lastname
         return personList.removeIf(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
