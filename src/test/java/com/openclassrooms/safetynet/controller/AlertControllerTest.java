@@ -2,8 +2,7 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.service.AlertService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,8 +21,8 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Slf4j
 public class AlertControllerTest {
-    private static final Logger logger = LogManager.getLogger("AlertControllerTest");
 
     @Mock
     private AlertService alertService;
@@ -33,7 +32,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildren() {
-        logger.info("testSuccessFindPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildren() for AlertController");
 
         // Mocking the service response
         PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO mockDTO = PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO.builder().build();
@@ -49,7 +47,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildren() {
-        logger.info("testErrorFindPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildren() for AlertController");
 
         // Mocking the service response
         PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO mockDTO = null;
@@ -66,7 +63,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindChildrenWithOthersMembersOfHousehold() {
-        logger.info("testSuccessFindChildrenWithOthersMembersOfHousehold() for AlertController");
 
         // Mocking the service response
         List<ChildrenWithOthersMembersOfHouseholdDTO> mockList = new ArrayList<>();
@@ -88,7 +84,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindChildrenWithOthersMembersOfHousehold() {
-        logger.info("testErrorFindChildrenWithOthersMembersOfHousehold() for AlertController");
 
         // Mocking the service response
         List<ChildrenWithOthersMembersOfHouseholdDTO> mockList = null;
@@ -104,7 +99,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindPhonesOfResidentsByFireStation(){
-        logger.info("testSuccessFindPhonesOfResidentsByFireStation() for AlertController");
 
         // Mocking the service response
         Set<String> mockSet = new HashSet<>(Arrays.asList("841-874-7784", "841-874-7462", "841-874-6512", "841-874-8547"));
@@ -120,7 +114,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindPhonesOfResidentsByFireStation(){
-        logger.info("testErrorFindPhonesOfResidentsByFireStation() for AlertController");
 
         // Mocking the service response
         Set<String> mockSet = null;
@@ -136,7 +129,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindPersonsByAddressAndFireStation(){
-        logger.info("testSuccessFindPersonsByAddressAndFireStation() for AlertController");
 
         // Mocking the service response
         PersonsByAddressWithFireStationNumberDTO mockDTO = PersonsByAddressWithFireStationNumberDTO.builder().build();
@@ -152,7 +144,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindPersonsByAddressAndFireStation(){
-        logger.info("testErrorFindPersonsByAddressAndFireStation() for AlertController");
 
         // Mocking the service response
         PersonsByAddressWithFireStationNumberDTO mockDTO = null;
@@ -168,7 +159,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindPersonsByStationNumber(){
-        logger.info("testSuccessFindPersonsByStationNumber() for AlertController");
 
         // Mocking the service response
         List<PersonByAddressDTO> mockList = new ArrayList<>();
@@ -184,7 +174,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindPersonsByStationNumber(){
-        logger.info("testErrorFindPersonsByStationNumber() for AlertController");
 
         // Mocking the service response
         List<PersonByAddressDTO> mockList = null;
@@ -200,7 +189,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindInfoAboutPerson() {
-        logger.info("testSuccessFindInfoAboutPerson() for AlertController");
 
         // Mocking the service response
         List<PersonInfoDTO> mockList = new ArrayList<>();
@@ -216,7 +204,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindInfoAboutPerson() {
-        logger.info("testErrorFindInfoAboutPerson() for AlertController");
 
         // Mocking the service response
         List<PersonInfoDTO> mockList = null;
@@ -232,7 +219,6 @@ public class AlertControllerTest {
 
     @Test
     public void testSuccessFindEmailFromPersonsInCity() {
-        logger.info("testSuccessFindEmailFromPersonsInCity() for AlertController");
 
         // Mocking the service response
         List<String> mockList = new ArrayList<>(Arrays.asList("Ville"));
@@ -248,7 +234,6 @@ public class AlertControllerTest {
 
     @Test
     public void testErrorFindEmailFromPersonsInCity() {
-        logger.info("testErrorFindEmailFromPersonsInCity() for AlertController");
 
         // Mocking the service response
         List<String> mockList = null;

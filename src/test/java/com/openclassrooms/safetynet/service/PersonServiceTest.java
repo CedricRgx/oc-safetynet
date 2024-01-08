@@ -2,8 +2,6 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.JSONDatabase;
 import com.openclassrooms.safetynet.model.Person;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,7 +24,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PersonServiceTest {
-    private static final Logger logger = LogManager.getLogger("PersonServiceTest");
 
     @Mock
     private JSONDatabase jsonDatabase;
@@ -44,7 +41,6 @@ public class PersonServiceTest {
      */
     @Test
     public void testGetPersonsService() {
-        logger.info("testGetPersonsService() for PersonServiceTest");
 
         // Arrange
         List<Person> expectedPersons = Arrays.asList(Person.builder().build(), Person.builder().build());
@@ -62,7 +58,6 @@ public class PersonServiceTest {
      */
     @Test
     public void testAddPersonService() {
-        logger.info("testAddPersonService() for PersonServiceTest");
 
         // Arrange
         Person personToAdd = Person.builder()
@@ -91,7 +86,6 @@ public class PersonServiceTest {
      */
     @Test
     public void testUpdatePersonService() {
-        logger.info("testUpdatePersonService() for PersonServiceTest");
 
         // Arrange
         Person personToUpdate = Person.builder()
@@ -145,7 +139,6 @@ public class PersonServiceTest {
      */
     @Test
     public void testUpdatePersonServicePersonNotFound() {
-        logger.info("testUpdatePersonServicePersonNotFound() for PersonServiceTest");
 
         // Arrange
         Person personToUpdate = Person.builder()
@@ -187,7 +180,6 @@ public class PersonServiceTest {
      */
     @Test
     public void testRemovePersonService() {
-        logger.info("testRemovePersonService() for PersonServiceTest");
 
         // Arrange
         String firstNameToRemove = "TestFirstName";

@@ -2,8 +2,6 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.JSONDatabase;
 import com.openclassrooms.safetynet.model.MedicalRecord;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,7 +24,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MedicalRecordServiceTest {
-    private static final Logger logger = LogManager.getLogger("MedicalRecordServiceTest");
 
     @Mock
     private JSONDatabase jsonDatabase;
@@ -44,7 +41,6 @@ public class MedicalRecordServiceTest {
      */
     @Test
     public void testGetMedicalRecordService() {
-        logger.info("testGetMedicalRecordService() for MedicalRecordServiceTest");
 
         // Arrange
         List<MedicalRecord> expectedMedicalRecords = Arrays.asList(MedicalRecord.builder().build(), MedicalRecord.builder().build());
@@ -62,7 +58,6 @@ public class MedicalRecordServiceTest {
      */
     @Test
     public void testAddMedicalRecordService() {
-        logger.info("testAddMedicalRecordService() for MedicalRecordServiceTest");
 
         // Arrange
         MedicalRecord medicalRecordToAdd = MedicalRecord.builder()
@@ -89,7 +84,6 @@ public class MedicalRecordServiceTest {
      */
     @Test
     public void testUpdateMedicalRecordService() {
-        logger.info("testUpdateFireStationService() for MedicalRecordServiceTest");
 
         // Arrange
         MedicalRecord medicalRecordToUpdate = MedicalRecord.builder()
@@ -134,7 +128,6 @@ public class MedicalRecordServiceTest {
      */
     @Test
     public void testUpdateMedicalRecordServiceMedicalRecordNotFound() {
-        logger.info("testUpdateMedicalRecordServicePersonNotFound() for MedicalRecordServiceTest");
 
         // Arrange
         MedicalRecord medicalRecordToUpdate = MedicalRecord.builder()
@@ -170,7 +163,6 @@ public class MedicalRecordServiceTest {
      */
     @Test
     public void testRemoveMedicalRecordService() {
-        logger.info("testRemoveMedicalRecordService() for MedicalRecordServiceTest");
 
         // Arrange
         String firstNameToRemove = "TestFirstName";

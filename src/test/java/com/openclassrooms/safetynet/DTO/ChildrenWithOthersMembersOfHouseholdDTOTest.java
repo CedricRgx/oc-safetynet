@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.DTO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
-    private static final Logger logger = LogManager.getLogger("ChildrenWithOthersMembersOfHouseholdDTOTest");
-
     private static ChildrenWithOthersMembersOfHouseholdDTO DTOForTest;
 
     String valueToTest;
@@ -25,7 +21,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @BeforeAll
     static void createDTOForTest(){
-        logger.info("Create ChildrenWithOthersMembersOfHouseholdDTO for test");
         String firstName = "Enfant";
         String lastName = "Petit";
         int age = 5;
@@ -36,7 +31,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     void initializeBuilderTest(){
-        logger.info("Test initializeBuilder for ChildrenWithOthersMembersOfHouseholdDTO");
         assertEquals(DTOForTest, ChildrenWithOthersMembersOfHouseholdDTO.builder()
                 .firstName("Enfant")
                 .lastName("Petit")
@@ -47,7 +41,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     void setAndGetFirstNameTest(){
-        logger.info("Test setAndGetFirstName for ChildrenWithOthersMembersOfHouseholdDTO");
         valueToTest = "Enfant";
         DTOForTest.setFirstName(valueToTest);
         assertEquals(valueToTest, DTOForTest.getFirstName());
@@ -55,7 +48,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     void setAndGetLastNameTest(){
-        logger.info("Test setAndGetLastName for ChildrenWithOthersMembersOfHouseholdDTO");
         valueToTest = "Petit";
         DTOForTest.setLastName(valueToTest);
         assertEquals(valueToTest, DTOForTest.getLastName());
@@ -63,7 +55,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     void setAndGetAgeTest(){
-        logger.info("Test setAndGetAge for ChildrenWithOthersMembersOfHouseholdDTO");
         ageToTest = 5;
         DTOForTest.setAge(ageToTest);
         assertEquals(ageToTest, DTOForTest.getAge());
@@ -71,7 +62,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     void setAndGetAddressTest(){
-        logger.info("Test setAndGetAddress for ChildrenWithOthersMembersOfHouseholdDTO");
         valueToTest = "15 rue de la rue";
         DTOForTest.setAddress(valueToTest);
         assertEquals(valueToTest, DTOForTest.getAddress());
@@ -79,7 +69,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     void setAndGetListOfOthersMembersOfTheHouseholdDTOTest() {
-        logger.info("Test setAndGetListOfOthersMembersOfTheHouseholdDTO for ChildrenWithOthersMembersOfHouseholdDTO");
         OthersMembersOfTheHouseholdDTO otherMemberOne = new OthersMembersOfTheHouseholdDTO("Toto", "Tata", "1509 Culver St");
         OthersMembersOfTheHouseholdDTO otherMemberTwo = new OthersMembersOfTheHouseholdDTO("Jean", "Miel", "1509 Culver St");
         listToTest = new ArrayList<>(){{add(otherMemberOne);add(otherMemberTwo);}};
@@ -90,7 +79,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     public void equalsTrueTest(){
-        logger.info("Test equalsTrue for ChildrenWithOthersMembersOfHouseholdDTO");
         ChildrenWithOthersMembersOfHouseholdDTO DTOForTestOne = new ChildrenWithOthersMembersOfHouseholdDTO(
                 "Arthur",
                 "Kaamelot",
@@ -117,7 +105,6 @@ public class ChildrenWithOthersMembersOfHouseholdDTOTest {
 
     @Test
     public void equalsNullTest(){
-        logger.info("Test equalsNull for ChildrenWithOthersMembersOfHouseholdDTO");
         ChildrenWithOthersMembersOfHouseholdDTO DTOForTestOne = new ChildrenWithOthersMembersOfHouseholdDTO(
                 "Arthur",
                 "Kaamelot",

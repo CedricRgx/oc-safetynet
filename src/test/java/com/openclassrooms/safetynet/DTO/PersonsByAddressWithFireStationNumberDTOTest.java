@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.DTO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonsByAddressWithFireStationNumberDTOTest {
-    private static final Logger logger = LogManager.getLogger("PersonsByAddressWithFireStationNumberDTOTest");
 
     private static PersonsByAddressWithFireStationNumberDTO DTOForTest;
 
@@ -23,7 +20,6 @@ public class PersonsByAddressWithFireStationNumberDTOTest {
 
     @BeforeAll
     static void createDTOForTest(){
-        logger.info("Create PersonsByAddressWithFireStationNumberDTO for test");
         String stationNumber = "3";
         List<PersonByAddressDTO> listPersonByAddressDTOToTest = new ArrayList<>();
         DTOForTest = new PersonsByAddressWithFireStationNumberDTO(stationNumber, listPersonByAddressDTOToTest);
@@ -31,7 +27,6 @@ public class PersonsByAddressWithFireStationNumberDTOTest {
 
     @Test
     void initializeBuilderTest(){
-        logger.info("Test initializeBuilder for PersonsByAddressWithFireStationNumberDTO");
         assertEquals(DTOForTest, PersonsByAddressWithFireStationNumberDTO.builder()
                 .stationNumber("3")
                 .listOfPersonsByAddress(new ArrayList<>()).build());
@@ -39,7 +34,6 @@ public class PersonsByAddressWithFireStationNumberDTOTest {
 
     @Test
     void setAndGetStationNumberTest(){
-        logger.info("Test setAndGetEmail for PersonsByAddressWithFireStationNumberDTO");
         valueToTest = "3";
         DTOForTest.setStationNumber(valueToTest);
         assertEquals(valueToTest, DTOForTest.getStationNumber());
@@ -47,7 +41,6 @@ public class PersonsByAddressWithFireStationNumberDTOTest {
 
     @Test
     void setAndGetListOfPersonByAddressDTOTest() {
-        logger.info("Test setAndGetListOfPersonByAddressDTO for PersonsByAddressWithFireStationNumberDTO");
         PersonByAddressDTO personByAddressOne = new PersonByAddressDTO(
                 "Enfant",
                 "Petit",
@@ -72,7 +65,6 @@ public class PersonsByAddressWithFireStationNumberDTOTest {
 
     @Test
     public void equalsTrueTest(){
-        logger.info("Test equalsTrue for PersonsByAddressWithFireStationNumberDTO");
         PersonByAddressDTO personByAddressOne = new PersonByAddressDTO(
                 "Enfant",
                 "Petit",
@@ -99,7 +91,6 @@ public class PersonsByAddressWithFireStationNumberDTOTest {
 
     @Test
     public void equalsNullTest(){
-        logger.info("Test equalsNull for PersonsByAddressWithFireStationNumberDTO");
         PersonByAddressDTO personByAddressOne = new PersonByAddressDTO(
                 "Enfant",
                 "Petit",

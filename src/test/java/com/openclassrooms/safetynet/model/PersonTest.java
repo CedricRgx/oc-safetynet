@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.model;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 class PersonTest {
-
-    private static final Logger logger = LogManager.getLogger("PersonTest");
 
     private static Person personTest;
     String valueToTest;

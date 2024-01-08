@@ -2,8 +2,6 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.JSONDatabase;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,7 +24,6 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class FireStationServiceTest {
-    private static final Logger logger = LogManager.getLogger("FireStationServiceTest");
 
     @Mock
     private JSONDatabase jsonDatabase;
@@ -44,7 +41,6 @@ public class FireStationServiceTest {
      */
     @Test
     public void testGetFireStationService() {
-        logger.info("testGetFireStationService() for FireStationServiceTest");
 
         // Arrange
         List<FireStation> expectedFireStations = Arrays.asList(FireStation.builder().build(), FireStation.builder().build());
@@ -62,7 +58,6 @@ public class FireStationServiceTest {
      */
     @Test
     public void testAddFireStationService() {
-        logger.info("testAddFireStationService() for FireStationServiceTest");
 
         // Arrange
         FireStation fireStationToAdd = FireStation.builder()
@@ -87,7 +82,6 @@ public class FireStationServiceTest {
      */
     @Test
     public void testUpdateFireStationService() {
-        logger.info("testUpdateFireStationService() for FireStationServiceTest");
 
         // Arrange
         FireStation fireStationToUpdate = FireStation.builder()
@@ -126,7 +120,6 @@ public class FireStationServiceTest {
      */
     @Test
     public void testUpdateFireStationServiceFireStationNotFound() {
-        logger.info("testUpdateFireStationServicePersonNotFound() for FireStationServiceTest");
 
         // Arrange
         FireStation fireStationToUpdate = FireStation.builder()
@@ -158,7 +151,6 @@ public class FireStationServiceTest {
      */
     @Test
     public void testRemoveFireStationService() {
-        logger.info("testRemoveFireStationService() for FireStationServiceTest");
 
         // Arrange
         String addressToRemove = "TestAddress";

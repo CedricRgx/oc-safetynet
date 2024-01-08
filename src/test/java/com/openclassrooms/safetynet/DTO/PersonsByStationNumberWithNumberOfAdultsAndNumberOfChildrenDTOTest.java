@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.DTO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,8 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest {
 
-    private static final Logger logger = LogManager.getLogger("PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
-
     private static PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO DTOForTest;
 
     int nbAdultsToTest;
@@ -25,7 +21,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @BeforeAll
     static void createDTOForTest(){
-        logger.info("Create PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO for test");
         int nbAdultsToTest = 3;
         int nbChildrenToTest = 4;
         List<PersonByStationNumberDTO> listToTest = new ArrayList<>(); //{{add("Adulte", "Petit", "15 rue de la rue", "666-777-8888", "12/06/1975");add("Adulte", "Petit", "15 rue de la rue", "666-777-8888", "12/06/1999");}};
@@ -34,7 +29,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @Test
     void initializeBuilderTest(){
-        logger.info("Test initializeBuilder for PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
         assertEquals(DTOForTest, PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO.builder()
                 .numberOfAdults(3)
                 .numberOfChildren(4)
@@ -43,7 +37,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @Test
     void setAndGetNumberOfAdultsTest(){
-        logger.info("Test setAndGetNumberOfAdults for PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
         nbAdultsToTest = 3;
         DTOForTest.setNumberOfAdults(nbAdultsToTest);
         assertEquals(nbAdultsToTest, DTOForTest.getNumberOfAdults());
@@ -51,7 +44,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @Test
     void setAndGetNumberOfChildrenTest(){
-        logger.info("Test setAndGetNumberOfChildren for PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
         nbChildrenToTest = 4;
         DTOForTest.setNumberOfChildren(nbChildrenToTest);
         assertEquals(nbChildrenToTest, DTOForTest.getNumberOfChildren());
@@ -59,7 +51,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @Test
     void setAndGetListOfPersonsByStationNumberTest() {
-        logger.info("Test setAndGetListOfPersonsByStationNumberTest for PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
         PersonByStationNumberDTO personByStationNumberOne = new PersonByStationNumberDTO(
                 "Adulte",
                 "Petit",
@@ -80,7 +71,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @Test
     public void equalsTrueTest(){
-        logger.info("Test equalsTrue for PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
         PersonByStationNumberDTO personByStationNumberOne = new PersonByStationNumberDTO(
                 "Adulte",
                 "Petit",
@@ -104,7 +94,6 @@ public class PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTOTest 
 
     @Test
     public void equalsNullTest(){
-        logger.info("Test equalsNull for PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO");
         PersonByStationNumberDTO personByStationNumberOne = new PersonByStationNumberDTO(
                 "Adulte",
                 "Petit",

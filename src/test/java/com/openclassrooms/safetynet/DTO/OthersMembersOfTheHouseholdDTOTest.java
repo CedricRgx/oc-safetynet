@@ -1,7 +1,5 @@
 package com.openclassrooms.safetynet.DTO;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,15 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 public class OthersMembersOfTheHouseholdDTOTest {
 
-    private static final Logger logger = LogManager.getLogger("OthersMembersOfTheHouseholdDTOTest");
-
     private static OthersMembersOfTheHouseholdDTO DTOForTest;
 
     String valueToTest;
 
     @BeforeAll
     static void createDTOForTest(){
-        logger.info("Create OthersMembersOfTheHouseholdDTO for test");
         String firstName = "Enfant";
         String lastName = "Petit";
         String address = "15 rue de la rue";
@@ -29,7 +24,6 @@ public class OthersMembersOfTheHouseholdDTOTest {
 
     @Test
     void initializeBuilderTest(){
-        logger.info("Test initializeBuilder for OthersMembersOfTheHouseholdDTOTest");
         assertEquals(DTOForTest, OthersMembersOfTheHouseholdDTO.builder()
                 .firstName("Enfant")
                 .lastName("Petit")
@@ -38,7 +32,6 @@ public class OthersMembersOfTheHouseholdDTOTest {
 
     @Test
     void setAndGetFirstNameTest(){
-        logger.info("Test setAndGetFirstName for OthersMembersOfTheHouseholdDTOTest");
         valueToTest = "Enfant";
         DTOForTest.setFirstName(valueToTest);
         assertEquals(valueToTest, DTOForTest.getFirstName());
@@ -46,7 +39,6 @@ public class OthersMembersOfTheHouseholdDTOTest {
 
     @Test
     void setAndGetLastNameTest(){
-        logger.info("Test setAndGetLastName for OthersMembersOfTheHouseholdDTOTest");
         valueToTest = "Petit";
         DTOForTest.setLastName(valueToTest);
         assertEquals(valueToTest, DTOForTest.getLastName());
@@ -54,7 +46,6 @@ public class OthersMembersOfTheHouseholdDTOTest {
 
     @Test
     void setAndGetAddressTest(){
-        logger.info("Test setAndGetAddress for OthersMembersOfTheHouseholdDTOTest");
         valueToTest = "15 rue de la rue";
         DTOForTest.setAddress(valueToTest);
         assertEquals(valueToTest, DTOForTest.getAddress());
@@ -62,7 +53,6 @@ public class OthersMembersOfTheHouseholdDTOTest {
 
     @Test
     public void equalsTrueTest(){
-        logger.info("Test equalsTrue for OthersMembersOfTheHouseholdDTOTest");
         OthersMembersOfTheHouseholdDTO DTOForTestOne = new OthersMembersOfTheHouseholdDTO(
                 "Arthur",
                 "Kaamelot",
@@ -79,7 +69,6 @@ public class OthersMembersOfTheHouseholdDTOTest {
 
     @Test
     public void equalsNullTest(){
-        logger.info("Test equalsNull for OthersMembersOfTheHouseholdDTOTest");
         OthersMembersOfTheHouseholdDTO DTOForTestOne = new OthersMembersOfTheHouseholdDTO(
                 "Arthur",
                 "Kaamelot",
