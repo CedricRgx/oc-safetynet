@@ -2,8 +2,7 @@ package com.openclassrooms.safetynet.service;
 
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.JSONDatabase;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +13,8 @@ import java.util.Optional;
  * The FireStationService class is used to return datas to the controller FireStationController
  */
 @Service
+@Slf4j
 public class FireStationService {
-
-    private static final Logger logger = LogManager.getLogger("FireStationService");
 
     @Autowired
     private JSONDatabase jsonDatabase;
@@ -26,8 +24,8 @@ public class FireStationService {
      * @return the list of fire station
      */
     public List<FireStation> getFireStationService(){
-        logger.info("Sending service of the list of firestations");
-        logger.debug("Sending service of the list of firestations");
+        log.info("Sending service of the list of firestations");
+        log.debug("Sending service of the list of firestations");
         List<FireStation> listOfFireStation = jsonDatabase.getListOfFireStations();
         return listOfFireStation;
     }
@@ -38,8 +36,8 @@ public class FireStationService {
      * @return fire station added
      */
     public FireStation addFireStationService(FireStation fireStation){
-        logger.info("Adding service of a fire station");
-        logger.debug("Adding service of a fire station");
+        log.info("Adding service of a fire station");
+        log.debug("Adding service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
         //Add a new firestation to the list of fire stations
         fireStationList.add(fireStation);
@@ -53,14 +51,14 @@ public class FireStationService {
      * @return fire station updated or null
      */
     public FireStation updateFireStationService(FireStation fireStation){
-        logger.info("Updating service of a fire station");
-        logger.debug("Updating service of a fire station");
+        log.info("Updating service of a fire station");
+        log.debug("Updating service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
         //Retrieve the firestation to update from its address
         Optional<FireStation> fireStationOptional = fireStationList.stream().filter(p -> p.getAddress().equals(fireStation.getAddress())).findAny();
         if(fireStationOptional.isPresent()){
-            logger.info("Update firestation");
-            logger.debug("Update firestation");
+            log.info("Update firestation");
+            log.debug("Update firestation");
             FireStation fireStationUpdate = fireStationOptional.get();
             //Update the station number of the firestation to update
             fireStationUpdate.setStationNumber(fireStation.getStationNumber());
@@ -79,8 +77,8 @@ public class FireStationService {
      * @return true if the fire station is not in the list (success of deletion)
      */
     public boolean removeFireStationService(String address, String stationNumber){
-        logger.info("Deleting service of a fire station");
-        logger.debug("Deleting service of a fire station");
+        log.info("Deleting service of a fire station");
+        log.debug("Deleting service of a fire station");
         List<FireStation> fireStationList = getFireStationService();
         //Delete the firestation from its address and its station number
         return fireStationList.removeIf(p -> p.getAddress().equals(address) && p.getStationNumber().equals(stationNumber));

@@ -2,8 +2,6 @@ package com.openclassrooms.safetynet.DTO;
 
 import lombok.Builder;
 import lombok.Data;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
@@ -13,8 +11,6 @@ import java.util.List;
 @Data
 @Builder
 public class ChildrenWithOthersMembersOfHouseholdDTO {
-
-    private static final Logger logger = LogManager.getLogger("ChildrenWithOthersMembersOfHouseholdDTO");
 
     private String firstName;
     private String lastName;

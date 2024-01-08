@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynet.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -11,8 +10,8 @@ import java.util.List;
 /**
  * The Calculator class is used to do some calculations for the service layer
  */
+@Slf4j
 public class Calculator {
-    private static final Logger logger = LogManager.getLogger("Calculator");
 
     /**
      * This method returns the age of a person from his birthday
@@ -20,7 +19,7 @@ public class Calculator {
      * @return the age of the person from his birthday in the parameter
      */
     public int calculateAge(String birthday) {
-        logger.info("Calculate the age from the birthday");
+        log.info("Calculate the age from the birthday");
         int ageOfPerson;
         //Define the format of birthday
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");

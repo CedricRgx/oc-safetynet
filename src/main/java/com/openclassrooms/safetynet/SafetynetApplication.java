@@ -6,8 +6,7 @@ import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.JSONDatabase;
 import com.openclassrooms.safetynet.model.MedicalRecord;
 import com.openclassrooms.safetynet.model.Person;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,9 +25,8 @@ import java.util.stream.Collectors;
  * The SafetynetApplication is used to parse the data.json file and launch the safetyNet application
  */
 @SpringBootApplication
+@Slf4j
 public class SafetynetApplication {
-
-	private static final Logger logger = LogManager.getLogger("SafetynetApplication");
 
 	@Autowired
 	private JSONDatabase jsonDatabase;
@@ -43,8 +41,8 @@ public class SafetynetApplication {
 		return args -> {
 
 			//Loading and reading the file
-			logger.info("Loading and reading the input json file");
-			logger.debug("Loading and reading the input json file");
+			log.info("Loading and reading the input json file");
+			log.debug("Loading and reading the input json file");
 			byte[] bytesFile = Files.readAllBytes(new File("src/main/resources/data.json").toPath());
 			//Iteration over file data
 			JsonIterator iter = JsonIterator.parse(bytesFile);
@@ -52,21 +50,21 @@ public class SafetynetApplication {
 
 			//Loading Person data from file into JSONDatabase object
 			Any personAny = any.get("persons");
-			logger.info("Loading persons data from input file");
+			log.info("Loading persons data from input file");
 			List<Person> personDatafile = initializePersons(personAny);
 			//Populate the JsonDatabase object from data retrieved from the input file
 			jsonDatabase.setListOfPersons(personDatafile);
 
 			//Loading FireStation data from file into JSONDatabase object
 			Any fireStationAny = any.get("firestations");
-			logger.info("Loading fire stations data from input file");
+			log.info("Loading fire stations data from input file");
 			List<FireStation> fireStationDatafile = initializeFireStation(fireStationAny);
 			//Populate the JsonDatabase object from data retrieved from the input file
 			jsonDatabase.setListOfFireStations(fireStationDatafile);
 
 			//Loading MedicalRecords data from file into JSONDatabase object
 			Any medicalRecordAny = any.get("medicalrecords");
-			logger.info("Loading medical records data from input file");
+			log.info("Loading medical records data from input file");
 			List<MedicalRecord> medicalrecordDatafile = initializeMedicalRecord(medicalRecordAny);
 			//Populate the JsonDatabase object from data retrieved from the input file
 			jsonDatabase.setListOfMedicalRecord(medicalrecordDatafile);

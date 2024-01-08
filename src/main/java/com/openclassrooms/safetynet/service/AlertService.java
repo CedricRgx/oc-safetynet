@@ -5,8 +5,7 @@ import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.model.JSONDatabase;
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.util.Calculator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +16,8 @@ import java.util.stream.Collectors;
  * The AlertService class is used to set up the datas and the business data for the AlertController
  */
 @Service
+@Slf4j
 public class AlertService {
-    private static final Logger logger = LogManager.getLogger("AlertService");
 
     @Autowired
     private JSONDatabase jsonDatabase;
@@ -29,8 +28,8 @@ public class AlertService {
      * @return the list of persons who have the same address
      */
     public List<Person> getListOfPersonsByAddress(String address){
-        logger.info("Retrieve a list of person who have the same address");
-        logger.debug("Retrieve a list of person who have the same address");
+        log.info("Retrieve a list of person who have the same address");
+        log.debug("Retrieve a list of person who have the same address");
         return jsonDatabase.getListOfPersons()
                 .stream()
                 .filter(p -> p.getAddress()
@@ -44,8 +43,8 @@ public class AlertService {
      * @return the list of persons who live in the same city
      */
     public List<String> getListOfPersonsByCity(String city){
-        logger.info("Retrieve a list of person who have the same address");
-        logger.debug("Retrieve a list of person who have the same address");
+        log.info("Retrieve a list of person who have the same address");
+        log.debug("Retrieve a list of person who have the same address");
         return jsonDatabase.getListOfPersons()
                 .stream()
                 .filter(p -> city.equals(p.getCity()) && p.getEmail() != null) // Null check to avoid NullPointerException
@@ -59,8 +58,8 @@ public class AlertService {
      * @return the list of fire stations which have the same station number
      */
     public List<FireStation> getListOfFireStationsByStationNumber(String stationNumber){
-        logger.info("Retrieve a list of fire stations which have the same station number");
-        logger.debug("Retrieve a list of fire stations which have the same station number");
+        log.info("Retrieve a list of fire stations which have the same station number");
+        log.debug("Retrieve a list of fire stations which have the same station number");
         return jsonDatabase.getListOfFireStations()
                 .stream()
                 .filter(f -> f.getStationNumber()
@@ -74,8 +73,8 @@ public class AlertService {
      * @return the list of fire stations which have the same address
      */
     public List<FireStation> getListOfFireStationsByAddress(String address){
-        logger.info("Retrieve a list of fire stations which have the same address");
-        logger.debug("Retrieve a list of fire stations which have the same address");
+        log.info("Retrieve a list of fire stations which have the same address");
+        log.debug("Retrieve a list of fire stations which have the same address");
         return jsonDatabase.getListOfFireStations()
                 .stream()
                 .filter(f -> f.getAddress()
@@ -89,8 +88,8 @@ public class AlertService {
      * @return the list of persons who share the same fire station
      */
     public List<PersonByStationNumberDTO> getListOfPersonByStationNumberDTO(String stationNumber){
-        logger.info("Creation of the list of people by station number");
-        logger.debug("Creation of the list of people by station number");
+        log.info("Creation of the list of people by station number");
+        log.debug("Creation of the list of people by station number");
         List<Person> listOfPersons = jsonDatabase.getListOfPersons();
         List<PersonByStationNumberDTO> listOfPersonByStationNumberDTO = new ArrayList<>();
         List<FireStation> listOfFireStationsByStationNumber = getListOfFireStationsByStationNumber(stationNumber);
@@ -118,8 +117,8 @@ public class AlertService {
      * @return a DTO which contains the list of persons with the number of adults and children
      */
     public PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO getPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenService(String stationNumber) {
-        logger.info("Sending service for the list of persons by station number with number of adults and number of children");
-        logger.debug("Sending service for the list of persons by station number with number of adults and number of children");
+        log.info("Sending service for the list of persons by station number with number of adults and number of children");
+        log.debug("Sending service for the list of persons by station number with number of adults and number of children");
         //Get the list of persons with the number of adults and children from a station number
         List<PersonByStationNumberDTO> listOfPersonByStationNumberDTO = getListOfPersonByStationNumberDTO(stationNumber);
         List<String> listOfBirthdays = new ArrayList<>();
@@ -145,8 +144,8 @@ public class AlertService {
      * @return the list of children with the others members of the household
      */
     public List<ChildrenWithOthersMembersOfHouseholdDTO> getChildrenWithOthersMembersOfHouseholdService(String address){
-        logger.info("Creation of the list of children with the others members of the household");
-        logger.debug("Creation of the list of children with the others members of the household");
+        log.info("Creation of the list of children with the others members of the household");
+        log.debug("Creation of the list of children with the others members of the household");
         List<ChildrenWithOthersMembersOfHouseholdDTO> listOfChildrenWithOthersMembersOfHousehold = new ArrayList<>();
         Calculator calculate = new Calculator();
         List<OthersMembersOfTheHouseholdDTO> listOfOtherMemberHouseHold;
@@ -188,8 +187,8 @@ public class AlertService {
      * @return the list of phones of persons living near a firestation
      */
     public Set<String> getPhonesOfResidentsByFireStationService(String stationNumber){
-        logger.info("Sending service for the list of phones of persons living near a firestation");
-        logger.debug("Sending service for the list of phones of persons living near a firestation");
+        log.info("Sending service for the list of phones of persons living near a firestation");
+        log.debug("Sending service for the list of phones of persons living near a firestation");
         List<FireStation> listOfFireStationsByStationNumber = getListOfFireStationsByStationNumber(stationNumber);
         List<Person> listOfPersons = jsonDatabase.getListOfPersons();
         Set<String> listOfPhones = new HashSet<>();
@@ -211,8 +210,8 @@ public class AlertService {
      * @return a list of person living at an address and the fire station number for this address
      */
     public PersonsByAddressWithFireStationNumberDTO getPersonsByAddressAndFireStationService(String address){
-        logger.info("Sending service for the list of person living at an address and the fire station number for this address");
-        logger.debug("Sending service for the list of person living at an address and the fire station number for this address");
+        log.info("Sending service for the list of person living at an address and the fire station number for this address");
+        log.debug("Sending service for the list of person living at an address and the fire station number for this address");
         List<PersonByAddressDTO> listOfPersonsByTheSameAddress = new ArrayList<>();
         Calculator calculate = new Calculator();
         List<Person> listOfPersonsByAddress = getListOfPersonsByAddress(address);
@@ -249,8 +248,8 @@ public class AlertService {
      * @return a list of person living at an address and the fire station number for the list of fire stations
      */
     public List<PersonByAddressDTO> getPersonsByStationNumberService(List<String> listOfStationNumbers){
-        logger.info("Sending service for the list of person living at an address and the fire station number for the list of fire stations");
-        logger.debug("Sending service for the list of person living at an address and the fire station number for the list of fire stations");
+        log.info("Sending service for the list of person living at an address and the fire station number for the list of fire stations");
+        log.debug("Sending service for the list of person living at an address and the fire station number for the list of fire stations");
         List<PersonByAddressDTO> listOfPersonByAddressForListOfStationNumbers = new ArrayList<>();
 
         //Retrieve an address list that matches the station numbers on the fire station list
@@ -297,8 +296,8 @@ public class AlertService {
      * @return a list of information about a person or several persons
      */
     public List<PersonInfoDTO> getInfoAboutPersonService(String firstName, String lastName){
-        logger.info("Sending service for the list of informations about a person");
-        logger.debug("Sending service for the list of informations about a person");
+        log.info("Sending service for the list of informations about a person");
+        log.debug("Sending service for the list of informations about a person");
         List<Person> listOfPersons = jsonDatabase.getListOfPersons();
         List<PersonInfoDTO> listOfInfoPerson = new ArrayList<>();
         //Retrieve the values of the PersonInfoDTO attributes for a person from his firstname and lastname
@@ -325,8 +324,8 @@ public class AlertService {
      * @return the list of emails of persons who live in the same city
      */
     public List<String> getEmailFromPersonsInCityService(String city) {
-        logger.info("Sending service for the list of emails of persons who live in the same city");
-        logger.debug("Sending service for the list of emails of persons who live in the same city");
+        log.info("Sending service for the list of emails of persons who live in the same city");
+        log.debug("Sending service for the list of emails of persons who live in the same city");
         return getListOfPersonsByCity(city);
     }
 }

@@ -2,8 +2,7 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.Person;
 import com.openclassrooms.safetynet.service.PersonService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,8 @@ import java.util.List;
  * The PersonController class is used to manage /persons endpoints and interact with the service PersonService
  */
 @RestController
+@Slf4j
 public class PersonController {
-
-    private static final Logger logger = LogManager.getLogger("PersonController");
 
     @Autowired
     private PersonService personService;
@@ -28,13 +26,14 @@ public class PersonController {
      */
     @GetMapping("/person")
     public ResponseEntity<List<Person>> getPersons() {
-        logger.info("GET request on the endpoint /persons: getting the list of persons");
+        log.info("GET request on the endpoint /persons: getting the list of persons");
+        log.debug("GET request on the endpoint /persons: getting the list of persons");
         List<Person> personList = personService.getPersonsService();
         if(personList.isEmpty()){
-            logger.error("Error getting the list of persons");
+            log.error("Error getting the list of persons");
             return new ResponseEntity<List<Person>>(personList, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success getting the list of persons");
+            log.info("Success getting the list of persons");
             return new ResponseEntity<List<Person>>(personList, HttpStatus.FOUND);
         }
     }
@@ -46,13 +45,13 @@ public class PersonController {
      */
     @PostMapping("/person")
     public ResponseEntity<Person> addPerson(@RequestBody Person personToAdd){
-        logger.info("POST request on the endpoint /persons: adding a person");
+        log.info("POST request on the endpoint /persons: adding a person");
         Person personAdded = personService.addPersonService(personToAdd);
         if(personAdded == null){
-            logger.error("Error adding person");
+            log.error("Error adding person");
             return new ResponseEntity<Person>(personAdded, HttpStatus.BAD_REQUEST);
         }else {
-            logger.info("Success adding person");
+            log.info("Success adding person");
             return new ResponseEntity<Person>(personAdded, HttpStatus.CREATED);
         }
     }
@@ -65,13 +64,13 @@ public class PersonController {
      */
     @PutMapping("/person")
     public ResponseEntity<Person> updatePerson(@RequestBody Person personToUpdate){
-        logger.info("PUT request on the endpoint /persons: updating a person");
+        log.info("PUT request on the endpoint /persons: updating a person");
         Person personUpdated = personService.updatePersonService(personToUpdate);
         if(personUpdated == null){
-            logger.error("Error updating person");
+            log.error("Error updating person");
             return new ResponseEntity<Person>(personUpdated, HttpStatus.NOT_FOUND);
         }else {
-            logger.info("Success updating person");
+            log.info("Success updating person");
             return new ResponseEntity<Person>(personUpdated, HttpStatus.OK);
         }
     }
@@ -83,13 +82,13 @@ public class PersonController {
      */
     @DeleteMapping("/person")
     public ResponseEntity deletePerson(@RequestParam String firstName, @RequestParam String lastName){
-        logger.info("DELETE request on the endpoint /persons: deleting a person");
+        log.info("DELETE request on the endpoint /persons: deleting a person");
         boolean isDeleted = personService.removePersonService(firstName, lastName);
         if(isDeleted){
-            logger.info("Success deleting person");
+            log.info("Success deleting person");
             return new ResponseEntity(HttpStatus.OK);
         }else {
-            logger.error("Error deleting person");
+            log.error("Error deleting person");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }

@@ -3,8 +3,7 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.DTO.*;
 import com.openclassrooms.safetynet.service.AlertService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +18,8 @@ import java.util.Set;
  * The AlertController class is used to set up the alerts of safetyNet via API REST and interact with the service AlertService
  */
 @RestController
+@Slf4j
 public class AlertController {
-
-    private static final Logger logger = LogManager.getLogger("AlertController");
 
     @Autowired
     private AlertService alertService;
@@ -39,13 +37,13 @@ public class AlertController {
      */
     @GetMapping("/firestation")
     public ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO> findPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildren(@RequestParam(value="stationNumber") String stationNumber){
-        logger.info("GET request on the endpoint /firestation?stationNumber=<station_number>: sending the list of people covered by a fire station");
+        log.info("GET request on the endpoint /firestation?stationNumber=<station_number>: sending the list of people covered by a fire station");
         PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO personsDTO = alertService.getPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenService(stationNumber);
         if(personsDTO == null){
-            logger.error("Error when displaying the list of people covered by a fire station");
+            log.error("Error when displaying the list of people covered by a fire station");
             return new ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO>(personsDTO, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the list of people covered by a fire station");
+            log.info("Success in displaying the list of people covered by a fire station");
             return new ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO>(personsDTO, HttpStatus.FOUND);
         }
     }
@@ -62,13 +60,13 @@ public class AlertController {
      */
     @GetMapping("/childAlert")
     public ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>> findChildrenWithOthersMembersOfHousehold(@RequestParam(value="address") String address){
-        logger.info("GET request on the endpoint /childAlert?address=<address>: sending a list of children living at the same address");
+        log.info("GET request on the endpoint /childAlert?address=<address>: sending a list of children living at the same address");
         List<ChildrenWithOthersMembersOfHouseholdDTO> listOfChildrenWithOthersMembersOfHousehold = alertService.getChildrenWithOthersMembersOfHouseholdService(address);
         if(listOfChildrenWithOthersMembersOfHousehold == null || listOfChildrenWithOthersMembersOfHousehold.isEmpty()){
-            logger.error("Error when displaying the list of children living at the same address");
+            log.error("Error when displaying the list of children living at the same address");
             return new ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>>(listOfChildrenWithOthersMembersOfHousehold, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the list of children living at the same address");
+            log.info("Success in displaying the list of children living at the same address");
             return new ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>>(listOfChildrenWithOthersMembersOfHousehold, HttpStatus.FOUND);
         }
     }
@@ -79,13 +77,13 @@ public class AlertController {
     */
     @GetMapping("/phoneAlert")
     public ResponseEntity<Set<String>> findPhonesOfResidentsByFireStation(@RequestParam(value="firestation") String stationNumber){
-        logger.info("GET request on the endpoint /phoneAlert?firestation=<firestation_number>: sending a list of telephone numbers for residents served by the fire station");
+        log.info("GET request on the endpoint /phoneAlert?firestation=<firestation_number>: sending a list of telephone numbers for residents served by the fire station");
         Set<String> listOfPhonesOfResidentsByFireStation = alertService.getPhonesOfResidentsByFireStationService(stationNumber);
         if(listOfPhonesOfResidentsByFireStation == null || listOfPhonesOfResidentsByFireStation.isEmpty()){
-            logger.error("Error when displaying the list of telephone numbers for residents served by the fire station");
+            log.error("Error when displaying the list of telephone numbers for residents served by the fire station");
             return new ResponseEntity<>(listOfPhonesOfResidentsByFireStation, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the list of telephone numbers for residents served by the fire station");
+            log.info("Success in displaying the list of telephone numbers for residents served by the fire station");
             return new ResponseEntity<>(listOfPhonesOfResidentsByFireStation, HttpStatus.FOUND);
         }
     }
@@ -102,13 +100,13 @@ public class AlertController {
      */
     @GetMapping("/fire")
     public ResponseEntity<PersonsByAddressWithFireStationNumberDTO> findPersonsByAddressAndFireStation(@RequestParam(value="address") String address){
-        logger.info("GET request on the endpoint /fire?address=<address>: sending a list of people to an address served by a fire station");
+        log.info("GET request on the endpoint /fire?address=<address>: sending a list of people to an address served by a fire station");
         PersonsByAddressWithFireStationNumberDTO personsByAddressWithFireStationNumberDTO = alertService.getPersonsByAddressAndFireStationService(address);
         if(personsByAddressWithFireStationNumberDTO == null){
-            logger.error("Error when displaying the list of people to an address served by a fire station");
+            log.error("Error when displaying the list of people to an address served by a fire station");
             return new ResponseEntity<PersonsByAddressWithFireStationNumberDTO>(personsByAddressWithFireStationNumberDTO, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the list of people to an address served by a fire station");
+            log.info("Success in displaying the list of people to an address served by a fire station");
             return new ResponseEntity<PersonsByAddressWithFireStationNumberDTO>(personsByAddressWithFireStationNumberDTO, HttpStatus.FOUND);
         }
     }
@@ -125,13 +123,13 @@ public class AlertController {
      */
     @GetMapping("/flood/stations")
     public ResponseEntity<List<PersonByAddressDTO>> findPersonsByStationNumber(@RequestParam(value="stations") List<String> listOfStationNumbers){
-        logger.info("GET request on the endpoint /flood/stations?stations=<a list of station_numbers>: sending a list of homes served by a fire station");
+        log.info("GET request on the endpoint /flood/stations?stations=<a list of station_numbers>: sending a list of homes served by a fire station");
         List<PersonByAddressDTO> listOfPersonByAddressForListOfStationNumbersDTO = alertService.getPersonsByStationNumberService(listOfStationNumbers);
         if(listOfPersonByAddressForListOfStationNumbersDTO == null){
-            logger.error("Error when displaying the list of homes served by a fire station");
+            log.error("Error when displaying the list of homes served by a fire station");
             return new ResponseEntity<List<PersonByAddressDTO>>(listOfPersonByAddressForListOfStationNumbersDTO, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the list of homes served by a fire station");
+            log.info("Success in displaying the list of homes served by a fire station");
             return new ResponseEntity<List<PersonByAddressDTO>>(listOfPersonByAddressForListOfStationNumbersDTO, HttpStatus.FOUND);
         }
     }
@@ -149,13 +147,13 @@ public class AlertController {
      */
     @GetMapping("/personInfo")
     public ResponseEntity<List<PersonInfoDTO>> findInfoAboutPerson(@RequestParam(value="firstName") String firstName, @RequestParam(value="lastName") String lastName){
-        logger.info("GET request on the endpoint /personInfo?firstName=<firstName>&lastName=<lastName>: sending informations about a person");
+        log.info("GET request on the endpoint /personInfo?firstName=<firstName>&lastName=<lastName>: sending informations about a person");
         List<PersonInfoDTO> listOfPersonsInfo = alertService.getInfoAboutPersonService(firstName, lastName);
         if(listOfPersonsInfo == null){
-            logger.error("Error when displaying the informations about a person");
+            log.error("Error when displaying the informations about a person");
             return new ResponseEntity<List<PersonInfoDTO>>(listOfPersonsInfo, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the informations about a person");
+            log.info("Success in displaying the informations about a person");
             return new ResponseEntity<List<PersonInfoDTO>>(listOfPersonsInfo, HttpStatus.FOUND);
         }
     }
@@ -170,13 +168,13 @@ public class AlertController {
      */
     @GetMapping("/communityEmail")
     public ResponseEntity<List<String>> findEmailFromPersonsInCity(@RequestParam(value="city") String city){
-        logger.info("GET request on the endpoint /communityEmail?city=<city>: sending the email list");
+        log.info("GET request on the endpoint /communityEmail?city=<city>: sending the email list");
         List<String> listOfEmailsFromPersonsInCity = alertService.getEmailFromPersonsInCityService(city);
         if(listOfEmailsFromPersonsInCity == null || listOfEmailsFromPersonsInCity.isEmpty()){
-            logger.error("Error when displaying the email addresses of all the inhabitants of the city");
+            log.error("Error when displaying the email addresses of all the inhabitants of the city");
             return new ResponseEntity<>(listOfEmailsFromPersonsInCity, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success in displaying the email addresses of everyone in the city");
+            log.info("Success in displaying the email addresses of everyone in the city");
             return new ResponseEntity<>(listOfEmailsFromPersonsInCity, HttpStatus.FOUND);
         }
     }

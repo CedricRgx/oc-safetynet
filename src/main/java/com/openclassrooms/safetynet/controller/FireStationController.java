@@ -2,8 +2,7 @@ package com.openclassrooms.safetynet.controller;
 
 import com.openclassrooms.safetynet.model.FireStation;
 import com.openclassrooms.safetynet.service.FireStationService;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,10 @@ import java.util.List;
  * The FireStationController class is used to manage /firestation endpoints and interact with the service FireStationService
  */
 @RestController
+@Slf4j
 public class FireStationController {
 
-    private static final Logger logger = LogManager.getLogger("FireStationController");
+
 
     @Autowired
     private FireStationService fireStationService;
@@ -28,13 +28,13 @@ public class FireStationController {
      */
     @GetMapping("/firestations")
     public ResponseEntity<List<FireStation>> getFireStation() {
-        logger.info("GET request on the endpoint /firestations: getting the list of fire stations");
+        log.info("GET request on the endpoint /firestations: getting the list of fire stations");
         List<FireStation> fireStationList = fireStationService.getFireStationService();
         if(fireStationList.isEmpty()){
-            logger.error("Error getting the list of fire stations");
+            log.error("Error getting the list of fire stations");
             return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.NOT_FOUND);
         }else{
-            logger.info("Success getting the list of fire stations");
+            log.info("Success getting the list of fire stations");
             return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.FOUND);
         }
     }
@@ -46,13 +46,13 @@ public class FireStationController {
      */
     @PostMapping("/firestation")
     public ResponseEntity<FireStation> addFireStation(@RequestBody FireStation fireStationtoAdd){
-        logger.info("POST request on the endpoint /firestation: adding a fire station");
+        log.info("POST request on the endpoint /firestation: adding a fire station");
         FireStation fireStationAdded = fireStationService.addFireStationService(fireStationtoAdd);
         if(fireStationAdded == null){
-            logger.error("Error adding fire station");
+            log.error("Error adding fire station");
             return new ResponseEntity<FireStation>(fireStationAdded, HttpStatus.BAD_REQUEST);
         }else {
-            logger.info("Success adding fire station");
+            log.info("Success adding fire station");
             return new ResponseEntity<FireStation>(fireStationAdded, HttpStatus.CREATED);
         }
     }
@@ -64,13 +64,13 @@ public class FireStationController {
      */
     @PutMapping("/firestation")
     public ResponseEntity<FireStation> updateFireStation(@RequestBody FireStation fireStationToUpdate){
-        logger.info("PUT request on the endpoint /firestation: updating a fire station");
+        log.info("PUT request on the endpoint /firestation: updating a fire station");
          FireStation fireStationUpdated = fireStationService.updateFireStationService(fireStationToUpdate);
         if(fireStationUpdated == null){
-            logger.error("Error updating fire station");
+            log.error("Error updating fire station");
             return new ResponseEntity<FireStation>(fireStationUpdated, HttpStatus.NOT_FOUND);
         }else {
-            logger.info("Success updating fire station");
+            log.info("Success updating fire station");
             return new ResponseEntity<FireStation>(fireStationUpdated, HttpStatus.OK);
         }
     }
@@ -82,13 +82,13 @@ public class FireStationController {
      */
     @DeleteMapping("/firestation")
     public ResponseEntity deleteFireStation(@RequestParam(value="address") String address, @RequestParam(value="stationNumber") String stationNumber){
-        logger.info("DELETE request on the endpoint /firestation: deleting a fire station");
+        log.info("DELETE request on the endpoint /firestation: deleting a fire station");
         boolean isDeleted = fireStationService.removeFireStationService(address, stationNumber);
         if(isDeleted){
-            logger.info("Success deleting fire station");
+            log.info("Success deleting fire station");
             return new ResponseEntity(HttpStatus.OK);
         }else {
-            logger.error("Error deleting fire station");
+            log.error("Error deleting fire station");
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
     }
