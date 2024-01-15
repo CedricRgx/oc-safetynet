@@ -28,7 +28,7 @@ class MedicalRecordControllerTest {
     public void getMedicalRecordsWithSuccessTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/medicalRecord"))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName", is("John")));
     }
 

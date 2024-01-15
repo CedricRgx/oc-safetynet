@@ -30,7 +30,7 @@ class FireStationControllerTest {
     public void getFireStationWithSuccessTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/firestations"))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].address", is("1509 Culver St")));
     }
 

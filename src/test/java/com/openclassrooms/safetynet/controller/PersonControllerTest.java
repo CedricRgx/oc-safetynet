@@ -29,7 +29,7 @@ class PersonControllerTest {
     public void getPersonsWithSuccessTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/person"))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].firstName", is("John")));
     }
 

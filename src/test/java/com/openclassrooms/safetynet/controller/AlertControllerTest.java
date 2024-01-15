@@ -41,7 +41,7 @@ public class AlertControllerTest {
         ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO> response = alertController.findPersonsByStationNumberWithNumberOfAdultsAndNumberOfChildren("1");
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockDTO, response.getBody());
     }
 
@@ -78,7 +78,7 @@ public class AlertControllerTest {
         ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>> response = alertController.findChildrenWithOthersMembersOfHousehold("1509 Culver St");
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockList, response.getBody());
     }
 
@@ -108,7 +108,7 @@ public class AlertControllerTest {
         ResponseEntity<Set<String>> response = alertController.findPhonesOfResidentsByFireStation("1");
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockSet, response.getBody());
     }
 
@@ -138,7 +138,7 @@ public class AlertControllerTest {
         ResponseEntity<PersonsByAddressWithFireStationNumberDTO> response = alertController.findPersonsByAddressAndFireStation("1509 Culver St");
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockDTO, response.getBody());
     }
 
@@ -168,7 +168,7 @@ public class AlertControllerTest {
         ResponseEntity<List<PersonByAddressDTO>> response = alertController.findPersonsByStationNumber(Arrays.asList("1", "2"));
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockList, response.getBody());
     }
 
@@ -198,7 +198,7 @@ public class AlertControllerTest {
         ResponseEntity<List<PersonInfoDTO>> response = alertController.findInfoAboutPerson(anyString(), anyString());
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockList, response.getBody());
     }
 
@@ -228,7 +228,7 @@ public class AlertControllerTest {
         ResponseEntity<List<String>> response = alertController.findEmailFromPersonsInCity(anyString());
 
         // Assertions
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockList, response.getBody());
     }
 
