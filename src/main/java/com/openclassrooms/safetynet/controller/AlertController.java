@@ -44,7 +44,7 @@ public class AlertController {
             return new ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO>(personsDTO, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the list of people covered by a fire station");
-            return new ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO>(personsDTO, HttpStatus.FOUND);
+            return new ResponseEntity<PersonsByStationNumberWithNumberOfAdultsAndNumberOfChildrenDTO>(personsDTO, HttpStatus.OK);
         }
     }
 
@@ -67,7 +67,7 @@ public class AlertController {
             return new ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>>(listOfChildrenWithOthersMembersOfHousehold, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the list of children living at the same address");
-            return new ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>>(listOfChildrenWithOthersMembersOfHousehold, HttpStatus.FOUND);
+            return new ResponseEntity<List<ChildrenWithOthersMembersOfHouseholdDTO>>(listOfChildrenWithOthersMembersOfHousehold, HttpStatus.OK);
         }
     }
 
@@ -84,7 +84,7 @@ public class AlertController {
             return new ResponseEntity<>(listOfPhonesOfResidentsByFireStation, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the list of telephone numbers for residents served by the fire station");
-            return new ResponseEntity<>(listOfPhonesOfResidentsByFireStation, HttpStatus.FOUND);
+            return new ResponseEntity<>(listOfPhonesOfResidentsByFireStation, HttpStatus.OK);
         }
     }
 
@@ -107,7 +107,7 @@ public class AlertController {
             return new ResponseEntity<PersonsByAddressWithFireStationNumberDTO>(personsByAddressWithFireStationNumberDTO, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the list of people to an address served by a fire station");
-            return new ResponseEntity<PersonsByAddressWithFireStationNumberDTO>(personsByAddressWithFireStationNumberDTO, HttpStatus.FOUND);
+            return new ResponseEntity<PersonsByAddressWithFireStationNumberDTO>(personsByAddressWithFireStationNumberDTO, HttpStatus.OK);
         }
     }
 
@@ -130,7 +130,7 @@ public class AlertController {
             return new ResponseEntity<List<PersonByAddressDTO>>(listOfPersonByAddressForListOfStationNumbersDTO, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the list of homes served by a fire station");
-            return new ResponseEntity<List<PersonByAddressDTO>>(listOfPersonByAddressForListOfStationNumbersDTO, HttpStatus.FOUND);
+            return new ResponseEntity<List<PersonByAddressDTO>>(listOfPersonByAddressForListOfStationNumbersDTO, HttpStatus.OK);
         }
     }
 
@@ -154,7 +154,7 @@ public class AlertController {
             return new ResponseEntity<List<PersonInfoDTO>>(listOfPersonsInfo, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the informations about a person");
-            return new ResponseEntity<List<PersonInfoDTO>>(listOfPersonsInfo, HttpStatus.FOUND);
+            return new ResponseEntity<List<PersonInfoDTO>>(listOfPersonsInfo, HttpStatus.OK);
         }
     }
 
@@ -175,7 +175,7 @@ public class AlertController {
             return new ResponseEntity<>(listOfEmailsFromPersonsInCity, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success in displaying the email addresses of everyone in the city");
-            return new ResponseEntity<>(listOfEmailsFromPersonsInCity, HttpStatus.FOUND);
+            return new ResponseEntity<>(listOfEmailsFromPersonsInCity, HttpStatus.OK);
         }
     }
 }

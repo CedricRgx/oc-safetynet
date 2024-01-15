@@ -35,7 +35,7 @@ public class FireStationController {
             return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success getting the list of fire stations");
-            return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.FOUND);
+            return new ResponseEntity<List<FireStation>>(fireStationList, HttpStatus.OK);
         }
     }
 

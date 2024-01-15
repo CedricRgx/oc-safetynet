@@ -34,7 +34,7 @@ public class PersonController {
             return new ResponseEntity<List<Person>>(personList, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success getting the list of persons");
-            return new ResponseEntity<List<Person>>(personList, HttpStatus.FOUND);
+            return new ResponseEntity<List<Person>>(personList, HttpStatus.OK);
         }
     }
 

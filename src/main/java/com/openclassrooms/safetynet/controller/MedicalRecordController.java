@@ -34,7 +34,7 @@ public class MedicalRecordController {
             return new ResponseEntity<List<MedicalRecord>>(medicalRecordList, HttpStatus.NOT_FOUND);
         }else{
             log.info("Success getting the list of medical records");
-            return new ResponseEntity<List<MedicalRecord>>(medicalRecordList, HttpStatus.FOUND);
+            return new ResponseEntity<List<MedicalRecord>>(medicalRecordList, HttpStatus.OK);
         }
     }
 
